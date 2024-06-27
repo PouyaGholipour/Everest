@@ -1,4 +1,5 @@
 ﻿using DomainLayer.MainInterfaces;
+using InfrastructureLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,37 @@ using System.Threading.Tasks;
 
 namespace InfrastructureLayer.MainServices
 {
-    public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext, new()
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        protected readonly DbContext dbContext;
+        protected readonly EverestDataBaseContext _dbContext;
 
-        public UnitOfWork()
+        public UnitOfWork(EverestDataBaseContext dbContext)
         {
-            dbContext = new TContext();
+            _dbContext = dbContext;
         }
+
+        //private UserRepository _userRepositoy;
+        //public UserRepository UserRepositoy
+        //{
+        //    get
+        //    {
+        //        if (_userRepositoy == null)
+        //        {
+        //            _userRepositoy = new UserRepository(_dbContext);
+        //        }
+        //        return _userRepositoy; 
+        //    }
+        //}
+
 
         public void Commit()
         {
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
-        public Task<int> CommitAsync()
+        public async Task<int> CommitAsync()
         {
-            return dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync();
         }
 
         #region Disposed
@@ -37,7 +52,7 @@ namespace InfrastructureLayer.MainServices
             {
                 if (disposing)
                 {
-                    dbContext.Dispose();
+                    _dbContext.Dispose();
                 }
             }
             _disposed = true;

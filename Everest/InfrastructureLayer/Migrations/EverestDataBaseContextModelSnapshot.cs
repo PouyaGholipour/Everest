@@ -318,8 +318,8 @@ namespace InfrastructureLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("BirthDayDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("BirthDayDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -327,12 +327,10 @@ namespace InfrastructureLayer.Migrations
                         .HasColumnType("varchar(150)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
@@ -351,7 +349,6 @@ namespace InfrastructureLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
@@ -361,17 +358,17 @@ namespace InfrastructureLayer.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProgId")
+                    b.Property<int?>("ProgId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("RegisterDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -458,8 +455,7 @@ namespace InfrastructureLayer.Migrations
                     b.HasOne("DomainLayer.Entities.Prog", "Prog")
                         .WithMany("Users")
                         .HasForeignKey("ProgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Prog");
                 });

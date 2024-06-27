@@ -1,4 +1,9 @@
+using DomainLayer.Entities;
+using DomainLayer.MainInterfaces;
+using DomainServices.Interface;
+using DomainServices.Services;
 using InfrastructureLayer.ApplicationDbContext;
+using InfrastructureLayer.MainServices;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,10 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
 builder.Services.AddDbContext<EverestDataBaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserRepositoy, UserRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 var app = builder.Build();
 

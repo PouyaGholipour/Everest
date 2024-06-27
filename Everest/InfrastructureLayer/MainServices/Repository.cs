@@ -1,4 +1,5 @@
 ﻿using DomainLayer.MainInterfaces;
+using DomainLayer.ServiceResults;
 using InfrastructureLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,9 +11,10 @@ using System.Threading.Tasks;
 
 namespace InfrastructureLayer.MainServices
 {
-    public class Repository<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly EverestDataBaseContext _dbContext;
+        public IUnitOfWork _unitOfWork { get; }
         private DbSet<TEntity> dbSet
         {
             get
@@ -21,9 +23,10 @@ namespace InfrastructureLayer.MainServices
             }
         }
 
-        public Repository(EverestDataBaseContext dbContext)
+        public Repository(EverestDataBaseContext dbContext,IUnitOfWork unitOfWork)
         {
             this._dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
 
         public List<TEntity> GetAll()
@@ -44,6 +47,7 @@ namespace InfrastructureLayer.MainServices
         public void Create(TEntity entity)
         {
             dbSet.Add(entity);
+            _unitOfWork.Commit();
         }
 
         public void Update(TEntity entity)
@@ -58,14 +62,12 @@ namespace InfrastructureLayer.MainServices
             var entity = GetById(id);
             if (entity == null)
                 throw new ArgumentNullException("شناسه موجودیت مورد نظر یافت نشد");
-            dbSet.Remove(entity);
         }
 
         public void Delete(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
-            dbSet.Remove(entity);
         }
 
         public async Task<List<TEntity>> GetAllAsync()
@@ -76,6 +78,7 @@ namespace InfrastructureLayer.MainServices
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> where)
         {
             return await dbSet.Where(where).FirstOrDefaultAsync();
+            _unitOfWork.CommitAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(int id)
@@ -86,6 +89,7 @@ namespace InfrastructureLayer.MainServices
         public async Task CreateAsync(TEntity entity)
         {
             await dbSet.AddAsync(entity);
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)
@@ -93,22 +97,6 @@ namespace InfrastructureLayer.MainServices
             if(entity == null)
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
             dbSet.Update(entity);
-        }
-
-        public async Task DeleteAsync(TEntity entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
-
-            dbSet.Remove(entity);
-        }
-
-        public async Task DeleteByIdAsync(int id)
-        {
-            var entity = GetById(id);
-            if (entity == null)
-                throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
-            dbSet.Remove(entity);
         }
 
         #region Dispose

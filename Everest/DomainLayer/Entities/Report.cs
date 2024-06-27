@@ -19,7 +19,7 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation property
 
-        public virtual ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
         #endregion
 

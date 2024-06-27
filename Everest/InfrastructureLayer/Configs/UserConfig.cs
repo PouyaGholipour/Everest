@@ -25,7 +25,7 @@ namespace InfrastructureLayer.Configs
 
             builder.Property(x => x.FullName)
                 .HasComputedColumnSql("[FirstName] + ' ' + [LastName]")
-                .HasColumnType("nvarchar").HasMaxLength(150);
+                .HasColumnType("nvarchar").HasMaxLength(150).IsRequired(false);
 
             builder.Property(x => x.Email)
                 .HasColumnType("varchar").HasMaxLength(150);
@@ -34,7 +34,7 @@ namespace InfrastructureLayer.Configs
                 .HasMaxLength(150).IsUnicode(true).IsRequired(true);
 
             builder.Property(x => x.Password).IsRequired(true);
-            builder.Property(x => x.Password)
+            builder.Property(x => x.Password).HasMaxLength(20)
                 .HasConversion(x => PasswordHash.Base64EnCode(x), x => PasswordHash.Base64DeCode(x));
 
             builder.HasQueryFilter(x => !x.IsDelete);
@@ -43,8 +43,11 @@ namespace InfrastructureLayer.Configs
 
             builder.Property(x => x.UserType).HasDefaultValue(UserType.User);
 
-            builder.HasOne(x => x.Prog).WithMany(x => x.Users).HasForeignKey(x => x.ProgId);
-            
+            builder.HasOne(x => x.Prog).WithMany(x => x.Users)
+                .HasForeignKey(x => x.ProgId).OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(x=>x.ProgId).IsRequired(false);
+
             builder.HasMany(x => x.Courses).WithMany(x => x.Users)
                 .UsingEntity<Dictionary<string, object>>(
                 j => j.HasOne<Course>().WithMany().HasForeignKey("CourseId"),

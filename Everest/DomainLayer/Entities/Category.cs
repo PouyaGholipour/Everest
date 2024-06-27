@@ -13,8 +13,8 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation property
 
-        public virtual ICollection<Course> Courses { get; set; }
-        public virtual ICollection<Prog> Progs { get; set; }
+        public ICollection<Course> Courses { get; set; }
+        public ICollection<Prog> Progs { get; set; }
 
         #endregion
     }

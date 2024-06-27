@@ -26,10 +26,10 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation property
 
-        public virtual Category Category { get; set; }
-        public virtual int CategoryId { get; set; }
-        public virtual ICollection<User> Users { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public Category Category { get; set; }
+        public int CategoryId { get; set; }
+        public ICollection<User> Users { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
         #endregion
     }

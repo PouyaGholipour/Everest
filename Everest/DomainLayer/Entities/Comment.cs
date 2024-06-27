@@ -20,11 +20,11 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation property
 
-        public virtual User User { get; set; }
+        public User User { get; set; }
         public int UserId { get; set; }
-        public virtual Report Report { get; set; }
+        public Report Report { get; set; }
         public int ReportId { get; set; }
-        public virtual Course Course { get; set; }
+        public Course Course { get; set; }
         public int CourseId { get; set; }
 
         #endregion

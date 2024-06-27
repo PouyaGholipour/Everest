@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.MainInterfaces
 {
-    public interface IUnitOfWork<TContext> : IDisposable where TContext : DbContext
+    public interface IUnitOfWork : IDisposable
     {
+
         void Commit();
         Task<int> CommitAsync();
     }

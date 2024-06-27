@@ -23,7 +23,5 @@ namespace DomainLayer.MainInterfaces
         Task<TEntity> GetByIdAsync(int id);
         Task CreateAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
-        Task DeleteByIdAsync(int id); 
     }
 }

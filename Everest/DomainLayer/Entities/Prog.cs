@@ -9,6 +9,10 @@ namespace DomainLayer.Entities
 {
     public class Prog
     {
+        public Prog()
+        {
+
+        }
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -27,9 +31,9 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation Property
 
-        public virtual Category Category { get; set; }
+        public Category Category { get; set; }
         public int CategoryId { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public ICollection<User> Users { get; set; }
 
         #endregion
     }

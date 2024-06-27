@@ -1,0 +1,103 @@
+﻿@using DomainLayer.DTOs.User
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<body dir="rtl">
+    <div class="container-fluid bg-white p-0 ">
+
+        <!-- Start Spinner  -->
+        @Html.Partial("_Spinner")
+        <!-- End Spinner -->
+
+        <section class="ftco-section mt-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+                        @if (ViewBag.IsSuccess != null)
+                            {
+                                <div class="alert alert-success">
+                                    <p class="help-block">ثبت نام با موفقیت انجام شد</p>
+                                </div>
+
+                                <script>
+                                    // Your delay in milliseconds
+                                    var delay = 3000; 
+                                    setTimeout(function () { window.location = "https://localhost:7154/User/LoginPage"; }, delay);
+                                </script>
+                            }
+                        <h1 class="mb-3">ثبت‌نام در وب سایت باشگاه</h1>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="login-wrap p-0">
+                            <form asp-controller="User" asp-action="Register" class="signin-form">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <input asp-for="UserName" type="text" class="form-control mt-3" placeholder="نام کاربری" required>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Email" type="email" class="form-control text-start mt-2" placeholder="ایمیل" required>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Password" id="register-password-field" type="password" class="form-control  mt-2" placeholder="رمز عبور" required>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="RePassword" id="register-password-repeat" type="password" class="form-control" placeholder="تکرار رمز عبور" required>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <p class="text-rule text-start">
+                                    ثبت نام شما به منزله پذیرش قوانین و مقررات باشگاه کوهنوردی اورست می باشد.
+                                </p>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary BTN-PANEL px-3">ثبت نام</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- start Contact -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="bg-light rounded p-3">
+                    <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
+                        <div class="row g-5 align-items-center">
+                            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                                <img class="img-fluid rounded w-100" src="/img/call-to-action.jpg" alt="Contact Support">
+                            </div>
+                            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                                <div class="mb-4">
+                                    <h1 class="mb-3">تماس با پشتیبانی</h1>
+                                    <p>برای ارتباط با مشاوران و تیم ما</p>
+                                </div>
+                                <a href="#" class="btn btn-primary BTN-PANEL py-3 px-4 me-2">
+                                    <i class="fa fa-phone-alt me-2"></i>تماس تلفنی
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end Contact -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
+            <i class="bi bi-arrow-up"></i>
+        </a>
+
+        @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+</body>
+
+</html>
+

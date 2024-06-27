@@ -1,0 +1,28 @@
+﻿<!-- start navbar -->
+<nav class="navbar">
+    <img class="img-fluid" src="./img/Logo.jpg" alt="آیکون" style="width: 80px; height: 50px;">
+    <ul class="nav-links">
+        <li><a asp-controller="Home" asp-action="Index" class="active">صفحه اصلی</a></li>
+        <li><a href="#">برنامه ها</a></li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle">برگزارشده ها <i class="bi"></i></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">برنامه‌های اجرا شده</a></li>
+                <li><a href="#">دوره‌های برگزار شده</a></li>
+            </ul>
+        </li>
+        <li><a href="#">دوره‌ها</a></li>
+        <li><a href="#">مجله باشگاه</a></li>
+        <li><a href="#">تماس با ما</a></li>
+        <li><a href="#">درباره باشگاه</a></li>
+        <i id="reservationIcon" class="bi bi-wallet-fill mx-3 fa-2x"></i>
+        <a asp-controller="User" asp-action="LoginPage" class="btn btn-primary BTN-PANEL">ورود</a>
+        <a asp-controller="User" asp-action="Register" class="btn btn-primary BTN-PANEL">ثبت نام</a>
+    </ul>
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</nav>
+<!-- end navbar -->
