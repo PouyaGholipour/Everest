@@ -25,6 +25,7 @@ namespace DomainLayer.Entities
         public string? NationalCode { get; set; }
         public string? ImageName { get; set; }
         public string? ImagePath { get; set; }
+        public string ActiveCode { get; set; }
         public bool IsActive { get; set; } = false;
         public bool IsDelete { get; set; } = false;
         public DateTimeOffset RegisterDate { get; set; } = DateTime.UtcNow;

@@ -97,6 +97,8 @@ namespace InfrastructureLayer.MainServices
             if(entity == null)
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
             dbSet.Update(entity);
+
+            _unitOfWork.CommitAsync();
         }
 
         #region Dispose

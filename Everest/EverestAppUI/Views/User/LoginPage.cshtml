@@ -1,9 +1,11 @@
-﻿@{
-    ViewData["Title"] = "LoginPage";
+﻿@using DomainLayer.DTOs.User
+@model LoginViewModel
+@{
+    ViewData["Title"] = "صفحه ورود";
     Layout = "~/Views/Shared/_DefaultLayout.cshtml";
 }
 
-<body dir="rtl">
+<body dblueue="rtl">
     <div class="container-fluid bg-white p-0 ">
 
         <!-- Start Spinner  -->
@@ -15,33 +17,55 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                    <h1 class="mb-3">ورود به سایت باشگاه</h1>
+                        @if (ViewBag.IsActive == false)
+                        {
+                            <div class="alert alert-warning">
+                                <p class="help-block">حساب کاربری شما فعال نمیباشد</p>
+                            </div>
+                        }
+
+                        @if (ViewBag.IsSuccess == true)
+                        {
+                             <div class="alert alert-success">
+                                <p class="help-block">ورود شما با موفقیت انجام شد.</p>
+                            </div>
+
+                            <script>
+                                // Your delay in milliseconds
+                                var delay = 2000; 
+                                setTimeout(function () { window.location = "https://localhost:7154"; }, delay);
+                             </script>
+                        }
+                        <h1 class="mb-3">ورود به سایت باشگاه</h1>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-4">
                     <div class="login-wrap p-0">
-                        <form action="#" class="signin-form">
+                        <form asp-controller="User" asp-action="LoginPage" enctype="multipart/form-data" class="signin-form">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <input type="text" class="form-control mt-3" placeholder="نام کاربری" required>
+                                <input asp-for = "Email" type="text" class="form-control mt-3" placeholder="ایمیل" required>
+                                <span asp-validation-for= "Email" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <input id="password-field" type="password" class="form-control mt-2" placeholder="رمز عبور" required>
+                                <input asp-for="Password" id="password-field" type="password" class="form-control mt-2" placeholder="رمز عبور" required>
+                                <span asp-validation-for= "Password" class="text-danger"></span>
                                 <span toggle="#password-field" class="fa fa-eye field-icon eye-icon toggle-password"></span>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary BTN-PANEL submit px-3">ورود</button>
                             </div>
                             <div class="form-group d-flex  mt-2">
                                 <div class="d-flex">
                                     <label class="checkbox-wrap checkbox-primary">به خاطر سپردن
-                                        <input type="checkbox" checked>
+                                        <input asp-for="RememberMe" type="checkbox" checked>
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="w-50 mx-4">
-                                    <a href="#" style="color: #F0F8FF">رمز عبورم را فراموش کردم!!!</a>
+                                    <a asp-controller="User" asp-action="ForgotPassword" style="color: #blue">رمز عبورم را فراموش کردم!!!</a>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary BTN-PANEL submit px-3">ورود</button>
                             </div>
                         </form>
                     </div>

@@ -16,8 +16,17 @@
         <li><a href="#">تماس با ما</a></li>
         <li><a href="#">درباره باشگاه</a></li>
         <i id="reservationIcon" class="bi bi-wallet-fill mx-3 fa-2x"></i>
-        <a asp-controller="User" asp-action="LoginPage" class="btn btn-primary BTN-PANEL">ورود</a>
-        <a asp-controller="User" asp-action="Register" class="btn btn-primary BTN-PANEL">ثبت نام</a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="User" asp-action="Logout" class="btn btn-primary BTN-PANEL">خروج</a>
+        }
+        else
+        {
+            <a asp-controller="User" asp-action="LoginPage" class="btn btn-primary BTN-PANEL">ورود</a>
+            <a asp-controller="User" asp-action="Register" class="btn btn-primary BTN-PANEL">ثبت نام</a>
+        }
+        
     </ul>
     <div class="hamburger">
         <span></span>
