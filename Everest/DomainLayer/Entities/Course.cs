@@ -28,7 +28,7 @@ namespace DomainLayer.Entities
 
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<CourseUser> CourseUsers { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
         #endregion

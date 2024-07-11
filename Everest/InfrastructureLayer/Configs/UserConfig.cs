@@ -37,6 +37,9 @@ namespace InfrastructureLayer.Configs
             builder.Property(x => x.Password).HasMaxLength(20)
                 .HasConversion(x => PasswordHash.Base64EnCode(x), x => PasswordHash.Base64DeCode(x));
 
+            builder.Property(x => x.UserType)
+                .HasConversion(x => x.ToString(), x => (UserType)Enum.Parse(typeof(UserType), x));
+
             builder.HasQueryFilter(x => !x.IsDelete);
 
             builder.Property(x => x.NationalCode).IsRequired(false).IsUnicode(true);
@@ -48,10 +51,6 @@ namespace InfrastructureLayer.Configs
 
             builder.Property(x=>x.ProgId).IsRequired(false);
 
-            builder.HasMany(x => x.Courses).WithMany(x => x.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                j => j.HasOne<Course>().WithMany().HasForeignKey("CourseId"),
-                j => j.HasOne<User>().WithMany().HasForeignKey("Id"));
         }
     }
 }

@@ -15,6 +15,9 @@ namespace DomainServices.Interface
     {
         //// Definition private function model
         Task<ClientMessageType> AddUser(RegisterViewModel register);
+        int AddUser(User user);
+        Task<EditUserViewModel> GetUserForShowEditMode(int id);
+        void DeleteUser(int id);
         bool IsExistUserName(string userName);
         bool IsExistEmail(string email);
         Task<ClientMessageType> LoginUser(LoginViewModel login);
@@ -22,5 +25,8 @@ namespace DomainServices.Interface
         bool ActiveAccount(string activeCode);
         Task<bool> ResetPassword(ResetPasswordViewModel reset);
         Task<bool> ForgotPasswordService(ForgotPasswordViewModel reset);
+        Task<UserListViewModel> GetUserList(int pageId = 1, string userNameFilter = "", string emailFilter = "");
+        Task<int> CreateUserFromAdmin(CreateUserViewModel createUser, List<int> SelectedRole);
+        Task EditUserFromAdmin(EditUserViewModel editUser);
     }
 }

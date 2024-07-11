@@ -4,6 +4,7 @@ using InfrastructureLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(EverestDataBaseContext))]
-    partial class EverestDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240710100814_Mig_ChangeDeleteBehavior_RoleUser_CourseUser")]
+    partial class Mig_ChangeDeleteBehavior_RoleUser_CourseUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -27,6 +27,9 @@ namespace InfrastructureLayer.ApplicationDbContext
             modelBuilder.ApplyConfiguration(new ProgConfig());
             modelBuilder.ApplyConfiguration(new ReportConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
+            modelBuilder.ApplyConfiguration(new RoleConfig());
+            modelBuilder.ApplyConfiguration(new RoleUserConfig());
+            modelBuilder.ApplyConfiguration(new CourseUserConfig());
         }
 
         public DbSet<User> Users { get; set; }
@@ -36,5 +39,7 @@ namespace InfrastructureLayer.ApplicationDbContext
         public DbSet<Journal> Journals { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<RoleUser> RoleUsers { get; set; }
+        public DbSet<CourseUser> CourseUsers { get; set; }
     }
 }

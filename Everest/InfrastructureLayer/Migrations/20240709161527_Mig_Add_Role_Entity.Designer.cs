@@ -4,6 +4,7 @@ using InfrastructureLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(EverestDataBaseContext))]
-    partial class EverestDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240709161527_Mig_Add_Role_Entity")]
+    partial class Mig_Add_Role_Entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace InfrastructureLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CourseUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseUser");
+                });
 
             modelBuilder.Entity("DomainLayer.Entities.Category", b =>
                 {
@@ -157,21 +174,6 @@ namespace InfrastructureLayer.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("DomainLayer.Entities.CourseUser", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("CourseUsers");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Journal", b =>
@@ -327,21 +329,6 @@ namespace InfrastructureLayer.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("DomainLayer.Entities.RoleUser", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RoleUsers");
-                });
-
             modelBuilder.Entity("DomainLayer.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -412,17 +399,44 @@ namespace InfrastructureLayer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<string>("UserType")
-                        .IsRequired()
+                    b.Property<int>("UserType")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("User");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProgId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleUser");
+                });
+
+            modelBuilder.Entity("CourseUser", b =>
+                {
+                    b.HasOne("DomainLayer.Entities.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("DomainLayer.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Comment", b =>
@@ -463,25 +477,6 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("DomainLayer.Entities.CourseUser", b =>
-                {
-                    b.HasOne("DomainLayer.Entities.Course", "Course")
-                        .WithMany("CourseUsers")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DomainLayer.Entities.User", "User")
-                        .WithMany("CourseUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("DomainLayer.Entities.Prog", b =>
                 {
                     b.HasOne("DomainLayer.Entities.Category", "Category")
@@ -491,25 +486,6 @@ namespace InfrastructureLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("DomainLayer.Entities.RoleUser", b =>
-                {
-                    b.HasOne("DomainLayer.Entities.Role", "Role")
-                        .WithMany("RoleUsers")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DomainLayer.Entities.User", "User")
-                        .WithMany("RoleUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.User", b =>
@@ -522,6 +498,19 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("Prog");
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("DomainLayer.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainLayer.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+                });
+
             modelBuilder.Entity("DomainLayer.Entities.Category", b =>
                 {
                     b.Navigation("Courses");
@@ -532,8 +521,6 @@ namespace InfrastructureLayer.Migrations
             modelBuilder.Entity("DomainLayer.Entities.Course", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("CourseUsers");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Prog", b =>
@@ -546,18 +533,9 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("DomainLayer.Entities.Role", b =>
-                {
-                    b.Navigation("RoleUsers");
-                });
-
             modelBuilder.Entity("DomainLayer.Entities.User", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("CourseUsers");
-
-                    b.Navigation("RoleUsers");
                 });
 #pragma warning restore 612, 618
         }

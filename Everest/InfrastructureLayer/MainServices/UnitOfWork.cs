@@ -18,20 +18,6 @@ namespace InfrastructureLayer.MainServices
             _dbContext = dbContext;
         }
 
-        //private UserRepository _userRepositoy;
-        //public UserRepository UserRepositoy
-        //{
-        //    get
-        //    {
-        //        if (_userRepositoy == null)
-        //        {
-        //            _userRepositoy = new UserRepository(_dbContext);
-        //        }
-        //        return _userRepositoy; 
-        //    }
-        //}
-
-
         public void Commit()
         {
             _dbContext.SaveChanges();

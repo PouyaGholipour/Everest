@@ -1,0 +1,100 @@
+﻿@using DomainLayer.DTOs.User
+@using DomainLayer.Entities
+@model EditUserViewModel
+@{
+    ViewData["Title"] = "ویرایش کاربر جدید";
+    List<Role> roles = ViewData["Roles"] as List<Role>;
+}
+
+<h1>افزودن کاربر جدید</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header BTN-PANEL text-white">اطلاعات کاربر</div>
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="EditUser" method="POST" enctype="multipart/form-data">
+                    <!-- Id Field (Hidden) -->
+                    <input asp-for="UserId" type="hidden" />
+                    <input asp-for="AvatarName" type="hidden" />
+                    
+                    <!-- نام کاربری -->
+                    <div class="form-group">
+                        <label asp-for="UserName" for="UserName">@Model.UserName</label>
+                    </div>
+                    
+                    <!-- ایمیل -->
+                    <div class="form-group">
+                        <label asp-for="Email" for="Email">ایمیل</label>
+                        <input asp-for="Email" type="text" class="form-control" id="Email" name="Email" placeholder="ایمیل خود را وارد کنید" required="">
+                    </div>
+                    
+                    <!-- رمز عبور -->
+                    <div class="form-group">
+                        <label asp-for="Password" for="Password">رمز عبور</label>
+                        <input asp-for="Password" type="text" class="form-control" id="Password" name="Password" placeholder="رمز عبور خود را وارد کنید" required="">
+                    </div>
+
+                    <!-- عکس پروفایل -->
+                    <div class="form-group">
+                        <label for="ProfileImage">عکس پروفایل</label>
+                        <br>
+                        <div class="profile-image-container">
+                            <img id="profileImagePreview" src="/UserAvatar/@Model.AvatarName" alt="Profile Image" class="profile-image mt-2 mb-2">
+                            <input asp-for="ImageName" type="file" class="form-control-file" id="ProfileImage" src="/UserAvatar/Default.jpg" style="display: none;">
+                            <button for="ImageName" class="Btn-Image" type="button" onclick="document.getElementById('ProfileImage').click()">تغییر تصویر</button>
+                        </div>
+                    </div>
+
+                     <div class="form-group mt-3">
+                        <label>انتخاب نقش کاربر</label>
+                        @foreach (var item in roles)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="SelectedRoles" @((Model.UserRoles.Any(r => r == item.RoleId) ? "checked" : "")) value="@item.RoleId">@item.RoleTitle
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <!-- دکمه ذخیره -->
+                    <button type="submit" class="btn btn-primary mt-3 BTN-PANEL mt-5">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#profileImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ProfileImage").change(function() {
+            readURL(this);
+        });
+    </script>
+}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var birthDayDateInput = document.getElementById("BirthDayDate");
+        var birthDayDate = new Date(birthDayDateInput.value);
+        var formattedDate = birthDayDate.getFullYear() + '/' + ('0' + (birthDayDate.getMonth() + 1)).slice(-2) + '/' + ('0' + birthDayDate.getDate()).slice(-2);
+        birthDayDateInput.value = formattedDate;
+    });
+</script>

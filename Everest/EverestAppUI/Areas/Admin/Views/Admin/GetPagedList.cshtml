@@ -1,0 +1,81 @@
+﻿@using DomainLayer.DTOs.User
+@using DomainLayer.Helper
+@model UserListViewModel
+@{
+    ViewData["Title"] = "لیست کاربران";
+}
+
+<h1>لیست کاربران</h1>
+
+<div class="row" style="margin:10px 0">
+    <form method="get">
+        <div class="col-sm-5 col-md-5">
+            <input type="text" name="UserNameFilter" class="form-control" placeholder="نام کاربری" />
+        </div>
+        <div class="col-sm-5 col-md-5">
+            <input type="text" name="EmailFilter" class="form-control" placeholder="ایمیل" />
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <button type="submit" class="btn btn-info">جستجو</button>
+            <a class="btn btn-default btn-sm" href="/Admin/Admin/GetPagedList">پاک کردن</a>
+        </div>
+    </form>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">نام کاربری</th>
+            <th scope="col">ایمیل</th>
+            <th scope="col">وضعیت</th>
+            <th scope="col">تاریخ ثبت نام</th>
+            <th scope="col">مدیریت کاربر</th> <!-- ستون جدید برای انتخاب سطر -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <td>@item.UserName</td>
+                <td>@item.Email</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <p class="text text-success">فعال</p>
+                    }
+                    else
+                    {
+                        <p class="text text-danger">غیر فعال</p>
+                    }
+                </td>
+                <td>@PersianDate.PersianDateTime(@item.RegisterDate).ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a href="/Admin/Admin/Delete/@item.Id" class="btn btn-primary BTN-PANEL">حذف</a>
+                    <a href="/Admin/EditUser/@item.Id" class="btn btn-primary BTN-PANEL">ویرایش</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<div class="m-3">
+    <a href="/Admin/CreateUser" type="button" class="btn btn-primary BTN-PANEL" id="newBtn">افزودن کاربر جدید</a>
+
+    <a href="#" type="button" class="btn btn-secondary mx-3" id="cancelBtn">انصراف</a>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    <li style="margin:5px" @*class=" paginate_button @((i == Model.CurrentPage)? "active": "")"*@ aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
+                        <a href="/Admin/Admin/GetPagedList?pageId=@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

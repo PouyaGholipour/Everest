@@ -28,8 +28,8 @@ namespace DomainLayer.Entities
         public string ActiveCode { get; set; }
         public bool IsActive { get; set; } = false;
         public bool IsDelete { get; set; } = false;
-        public DateTimeOffset RegisterDate { get; set; } = DateTime.UtcNow;
-        public DateTimeOffset? BirthDayDate { get; set; }
+        public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
+        public DateTime? BirthDayDate { get; set; }
         public UserType UserType { get; set; } = UserType.User;
 
         #region Relations for navigation property
@@ -37,8 +37,42 @@ namespace DomainLayer.Entities
         [ForeignKey(nameof(ProgId))]
         public Prog? Prog { get; set; }
         public int? ProgId { get; set; }
-        public ICollection<Course> Courses { get; set; }
+        public ICollection<CourseUser> CourseUsers { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<RoleUser> RoleUsers { get; set; }
+        #endregion
+    }
+
+    public class CourseUser
+    {
+        public CourseUser()
+        {
+
+        }
+        public int CourseId { get; set; }
+        public int UserId { get; set; }
+
+        #region Relations for navigation property
+
+        public Course Course { get; set; }
+        public User User { get; set; }
+
+        #endregion
+    }
+
+    public class RoleUser
+    {
+        public RoleUser()
+        {
+
+        }
+        public int RoleId { get; set; }
+        public int UserId { get; set; }
+
+        #region Relations for navigation property
+
+        public Role Role { get; set; }
+        public User User { get; set; }
 
         #endregion
     }

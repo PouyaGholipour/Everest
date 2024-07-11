@@ -18,7 +18,7 @@ namespace DomainServices.Services
         public CourseService(EverestDataBaseContext context
                             , IUnitOfWork unitOfWork) : base(context, unitOfWork)
         {
-            this._context = (this._context ?? (EverestDataBaseContext)_context);
+            this._context = (this._context ?? (EverestDataBaseContext)context);
         }
     }
 }

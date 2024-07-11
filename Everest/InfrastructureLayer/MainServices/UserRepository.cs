@@ -23,6 +23,9 @@ namespace InfrastructureLayer.MainServices
             _Context = everestDataBase;
         }
 
-        
+        public async Task<User> GetUserWithRolesByIdAsync(int id)
+        {
+            return await _Context.Users.Include(x => x.RoleUsers).FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

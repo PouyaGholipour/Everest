@@ -55,19 +55,19 @@ namespace InfrastructureLayer.MainServices
             if (entity == null)
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
             dbSet.Update(entity);
+            _unitOfWork.Commit();
         }
 
         public void DeleteById(int id)
         {
             var entity = GetById(id);
-            if (entity == null)
-                throw new ArgumentNullException("شناسه موجودیت مورد نظر یافت نشد");
         }
 
         public void Delete(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
+
         }
 
         public async Task<List<TEntity>> GetAllAsync()
@@ -78,7 +78,6 @@ namespace InfrastructureLayer.MainServices
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> where)
         {
             return await dbSet.Where(where).FirstOrDefaultAsync();
-            _unitOfWork.CommitAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(int id)
@@ -98,7 +97,7 @@ namespace InfrastructureLayer.MainServices
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
             dbSet.Update(entity);
 
-            _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
         }
 
         #region Dispose

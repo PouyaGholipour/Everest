@@ -20,6 +20,7 @@ using DomainLayer.Enums;
 using TopLearn.Core.Generators;
 using TopLearn.Core.Convertors;
 using TopLearn.Core.Senders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DomainServices.Services
 {
@@ -28,15 +29,18 @@ namespace DomainServices.Services
         private readonly EverestDataBaseContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IViewRenderService _viewRender;
+        private readonly IUserRepositoy _userRepositoy;
         public IUnitOfWork _unitOfWork { get; }
         public UserService(EverestDataBaseContext context,
                            IUnitOfWork unitOfWork,
                            IHttpContextAccessor httpContextAccessor,
+                           IUserRepositoy userRepositoy,
                            IViewRenderService viewRender) : base(context, unitOfWork)
         {
             this._context = (this._context ?? (EverestDataBaseContext)context);
             _httpContextAccessor = httpContextAccessor;
             _viewRender = viewRender;
+            _userRepositoy = userRepositoy;
         }
 
         public bool IsExistUserName(string userName)
@@ -158,6 +162,134 @@ namespace DomainServices.Services
 
             return true;
 
+        }
+
+        public async Task<UserListViewModel> GetUserList(int pageId = 1, string userNameFilter = "", string emailFilter = "")
+        {
+            IQueryable<User> result = _context.Users;
+
+            if (!string.IsNullOrEmpty(userNameFilter))
+                result = result.Where(x => x.UserName.Contains(userNameFilter));
+
+            if (!string.IsNullOrEmpty(emailFilter))
+                result = result.Where(x => x.Email.Contains(emailFilter));
+
+            double take = 10;
+            double skip = (pageId - 1) * take;
+
+            UserListViewModel userList = new UserListViewModel();
+            userList.CurrentPage = pageId;
+            var pageCount = (Math.Ceiling(result.Count() / take));
+            userList.PageCount = Convert.ToInt32(pageCount);
+            userList.Users = result.OrderBy(x => x.RegisterDate).Skip(Convert.ToInt32(skip)).Take(Convert.ToInt32(take)).ToList();
+
+            return userList;
+        }
+        
+        public async Task<EditUserViewModel> GetUserForShowEditMode(int id)
+        {
+            var user = await _userRepositoy.GetUserWithRolesByIdAsync(id);
+
+            var viewModel = new EditUserViewModel()
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                AvatarName = user.ImageName,
+                UserName = user.UserName,
+                Password = user.Password,
+                UserRoles = user.RoleUsers.Select(x => x.RoleId).ToList(),
+            };
+            return viewModel;
+        }
+
+        public void DeleteUser(int id)
+        {
+            var user = GetById(id);
+            user.IsDelete = true;
+            Update(user);
+        }
+
+        public async Task<int> CreateUserFromAdmin(CreateUserViewModel createUser, List<int> SelectedRoles)
+        {
+            
+            User user = new User();
+            user.Email = createUser.Email;
+            user.UserName = createUser.UserName;
+            user.Password = createUser.Password;
+            user.IsActive = true;
+            user.ActiveCode = NameGenerator.GenerateUniqCode();
+            user.RegisterDate = DateTime.Now;
+
+
+            if(SelectedRoles.Contains(1))
+                user.UserType = UserType.User;
+
+            if (SelectedRoles.Contains(2))
+                user.UserType = UserType.SpecialUser;
+
+            if (SelectedRoles.Contains(3))
+                user.UserType = UserType.AdminUser;
+
+            if (SelectedRoles.Contains(4))
+                user.UserType = UserType.Manager;
+
+            #region Save Avatar
+
+            if (createUser.ImageName != null)
+            {
+                string imagePath = "";
+                user.ImageName = NameGenerator.GenerateUniqCode() + Path.GetExtension(createUser.ImageName.FileName);
+                imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", user.ImageName);
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    createUser.ImageName.CopyTo(stream);
+                }
+                user.ImagePath = imagePath;
+            }
+            
+            #endregion
+            return AddUser(user);
+        }
+
+        public int AddUser(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return user.Id;
+        }
+
+        public async Task EditUserFromAdmin(EditUserViewModel editUser)
+        {
+            User user = await _userRepositoy.GetUserWithRolesByIdAsync(editUser.UserId);
+            user.Email = editUser.Email;
+            
+            if(string.IsNullOrEmpty(editUser.Password))
+                user.Password = editUser.Password;
+            #region User Avatar
+
+            if (editUser.ImageName != null)
+            {
+                // delete old image
+                if(editUser.AvatarName != "Default.jpg")
+                {
+                    string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", editUser.AvatarName);
+                    if(File.Exists(deletePath))
+                        File.Delete(deletePath);
+                }
+
+                // Save new image
+                user.ImageName = NameGenerator.GenerateUniqCode() + Path.GetExtension(editUser.ImageName.FileName);
+                 var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", user.ImageName);
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    editUser.ImageName.CopyTo(stream);
+                }
+                user.ImagePath = imagePath;
+            }
+            
+            #endregion
+
+            await UpdateAsync(user);
         }
     }
 }

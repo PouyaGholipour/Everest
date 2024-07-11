@@ -11,14 +11,20 @@ using System.Threading.Tasks;
 
 namespace DomainServices.Services
 {
-    public class ProgService : Repository<Prog>, IProgService
+    public class PermissionService : Repository<Role>, IPermissionService
     {
         private readonly EverestDataBaseContext _context;
         public IUnitOfWork _unitOfWork { get; }
-        public ProgService(EverestDataBaseContext context
+        public PermissionService(EverestDataBaseContext context
                             , IUnitOfWork unitOfWork) : base(context, unitOfWork)
         {
             this._context = (this._context ?? (EverestDataBaseContext)context);
+        }
+
+        public List<Role> GetRoles()
+        {
+            var permmissions = GetAll();
+            return permmissions;
         }
     }
 }

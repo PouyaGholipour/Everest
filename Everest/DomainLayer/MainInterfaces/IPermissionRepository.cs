@@ -1,19 +1,17 @@
-﻿using DomainLayer.DTOs.User;
-using DomainLayer.Entities;
+﻿using DomainLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DomainLayer.MainInterfaces
 {
-    public interface IUserRepositoy : IRepository<User>
+    public interface IPermissionRepository : IRepository<Role>
     {
         //// Definition private function model
 
-        Task<User> GetUserWithRolesByIdAsync(int id);
-
+        void AddRoleToUser(List<int> RoleId, int userId);
+        void EditUserRole(int userId, List<int> RoleIds);
     }
 }

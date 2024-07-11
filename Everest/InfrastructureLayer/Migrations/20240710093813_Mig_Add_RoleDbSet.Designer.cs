@@ -4,6 +4,7 @@ using InfrastructureLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(EverestDataBaseContext))]
-    partial class EverestDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240710093813_Mig_Add_RoleDbSet")]
+    partial class Mig_Add_RoleDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -412,11 +414,10 @@ namespace InfrastructureLayer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<string>("UserType")
-                        .IsRequired()
+                    b.Property<int>("UserType")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("User");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
@@ -468,13 +469,13 @@ namespace InfrastructureLayer.Migrations
                     b.HasOne("DomainLayer.Entities.Course", "Course")
                         .WithMany("CourseUsers")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DomainLayer.Entities.User", "User")
                         .WithMany("CourseUsers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -498,13 +499,13 @@ namespace InfrastructureLayer.Migrations
                     b.HasOne("DomainLayer.Entities.Role", "Role")
                         .WithMany("RoleUsers")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DomainLayer.Entities.User", "User")
                         .WithMany("RoleUsers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Role");
