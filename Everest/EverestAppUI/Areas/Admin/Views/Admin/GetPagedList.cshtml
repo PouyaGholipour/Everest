@@ -71,7 +71,7 @@
             <ul class="pagination">
                 @for (int i = 1; i <= Model.PageCount; i++)
                 {
-                    <li style="margin:5px" @*class=" paginate_button @((i == Model.CurrentPage)? "active": "")"*@ aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
+                    <li style="margin:5px" class=" paginate_button @((i == Model.CurrentPage)? "active": "")" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
                         <a href="/Admin/Admin/GetPagedList?pageId=@i">@i</a>
                     </li>
                 }

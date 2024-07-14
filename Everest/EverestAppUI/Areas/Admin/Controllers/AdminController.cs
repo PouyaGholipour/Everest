@@ -50,9 +50,9 @@ namespace EverestAppUI.Areas.Admin.Controllers
             List<int> Ids = ViewData["Roles"] as List<int>;
             try
             {
-                var userId = _userService.CreateUserFromAdmin(createUser, Ids).Result;
+                var userId = _userService.CreateUserFromAdmin(createUser, SelectedRoles).Result;
 
-                _permissionRepository.AddRoleToUser(Ids, userId);
+                _permissionRepository.AddRoleToUser(SelectedRoles, userId);
                 return Redirect("/Admin/Admin/GetPagedList");
             }
             catch (Exception ex)
@@ -104,8 +104,6 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
                 return View(editUserViewModel);
-            //var userId = editUserViewModel.UserId;
-            //List<int> Ids = SelectedRoles;
 
             try
             {

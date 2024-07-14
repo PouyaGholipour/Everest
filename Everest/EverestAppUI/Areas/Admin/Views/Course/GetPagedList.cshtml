@@ -1,0 +1,37 @@
+﻿@using DomainLayer.DTOs.Course
+@using DomainLayer.Helper
+@model CourseListViewModel
+@{
+    ViewData["Title"] = "مدیریت دوره ها";
+}
+
+<h1>لیست دوره ها</h1>
+
+<div class="container mt-5 table-container">
+    <table class="table table-striped table-hover mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">عنوان دوره</th>
+                <th scope="col">تاریخ برگزاری</th>
+                <th scope="col">مدیریت دوره</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var course in Model.Courses)
+            {
+                <tr>
+                    <td>@course.CourseTitle</td>
+                    <td>@course.DateOfHolding.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-controller="Course" asp-action="DeleteCourse" asp-route-CourseId="@course.Id" class="btn btn-primary BTN-PANEL">حذف</a>
+                        <a asp-controller="Course" asp-action="EditCourse" asp-route-CourseId="@course.Id" class="btn btn-primary BTN-PANEL">ویرایش</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <a href="/Admin/Course/AddCourse" type="button" class="btn btn-primary BTN-PANEL" id="newBtn">دوره جدید</a>
+        <a type="button" class="btn btn-secondary mx-3" id="cancelBtn">انصراف</a>
+    </div>
+</div>

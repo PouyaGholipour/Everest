@@ -1,0 +1,128 @@
+﻿@using DomainLayer.DTOs.Course
+@model EditCourseViewModel
+@{
+    ViewData["Title"] = "ویرایش دوره";
+}
+
+<h1>ویرایش دوره</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header BTN-PANEL text-white">اطلاعات دوره جدید</div>
+            <div class="card-body">
+                <form asp-controller="Course" asp-action="EditCourse" method="POST" enctype="multipart/form-data">
+                    <!-- Id Field (Hidden) -->
+                    <input asp-for="CourseId" type="hidden">
+                    <input asp-for="CourseImage" type="hidden">
+
+                    <!-- عنوان دوره -->
+                    <div class="form-group">
+                        <label asp-for="CourseTitle" for="CourseTitle">عنوان دوره</label>
+                        <input asp-for="CourseTitle" type="text" class="form-control" id="CourseTitle" name="CourseTitle"  required="">
+                    </div>
+
+                    <!-- توضیحات -->
+                    <div class="form-group">
+                        <label asp-for="Description" for="Description">توضیحات</label>
+                        <textarea asp-for="Description" class="form-control" id="Description" name="Description" rows="4" required="">توضیحات دوره</textarea>
+                    </div>
+
+                    <!-- نام مربی -->
+                    <div class="form-group">
+                        <label asp-for="CoachName" for="CoachName">نام مربی</label>
+                        <input asp-for="CoachName" type="text" class="form-control" id="CoachName" name="CoachName" required="">
+                    </div>
+
+                    <!-- محل برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="Place" for="Place">محل برگزاری</label>
+                        <input asp-for="Place" type="text" class="form-control" id="Place" name="Place"  required="">
+                    </div>
+
+                    <!-- پیش نیازهای دوره -->
+                    <div class="form-group">
+                        <label asp-for="WhichCoursePrerequisites" for="WhichCoursePrerequisites">پیش نیازهای دوره</label>
+                        <input asp-for="WhichCoursePrerequisites" type="text" class="form-control" id="WhichCoursePrerequisites" name="WhichCoursePrerequisites" >
+                    </div>
+
+                    <!-- دوره‌های پیش نیاز -->
+                    <div class="form-group">
+                        <label asp-for="PrerequisiteCourse" for="PrerequisiteCourse">دوره‌های پیش نیاز</label>
+                        <input asp-for="PrerequisiteCourse" type="text" class="form-control" id="PrerequisiteCourse" name="PrerequisiteCourse" >
+                    </div>
+
+                    <!-- انتخاب تصویر -->
+                    <div class="form-group">
+                        <img id="CourseImagePreview" src="/CourseImage/@Model.CourseImage" alt="Course Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
+                    </div>
+
+                    <!-- قیمت -->
+                    <div class="form-group">
+                        <label asp-for="Pirce" for="Pirce">قیمت</label>
+                        <input asp-for="Pirce" type="number" class="form-control" id="Pirce" name="Pirce"  required="">
+                    </div>
+
+                    <!-- وضعیت -->
+                    <div class="form-group">
+                        <label asp-for="Status" for="Status">وضعیت</label>
+                        <select asp-for="Status" class="form-control" id="Status" name="Status" required="">
+                            <option value="1" selected="">فعال</option>
+                            <option value="0">غیرفعال</option>
+                        </select>
+                    </div>
+                    
+                    <!-- دسته بندی -->
+                    <div class="form-group">
+                        <label asp-for="CategoryId" for="CategoryId">دسته بندی</label>
+                        <select asp-for="CategoryId" class="form-control" id="CategoryId" name="CategoryId" required="">
+                            <option value="1" selected="">دوره ها</option>
+                            <option value="2">برنامه ها</option>
+                        </select>
+                    </div>
+
+                    <!-- تاریخ برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="DateOfHolding" for="DateOfHolding">تاریخ برگزاری</label>
+                        <input asp-for="DateOfHolding" type="text" class="form-control" id="DateOfHolding" name="DateOfHolding" value="@Model.DateOfHolding" required="">
+                    </div>
+
+                    <!-- نوع دوره -->
+                    <div class="form-group">
+                        <label asp-for="CourseType" for="CourseType">نوع دوره</label>
+                        <select asp-for="CourseType" class="form-control" id="CourseType" name="CourseType" required="">
+                            <option value="1">عملی</option>
+                            <option value="2">نظری</option>
+                        </select>
+                    </div>
+                    <!-- دکمه ذخیره -->
+                    <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#CourseImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageName").change(function() {
+            readURL(this);
+        });
+    </script>
+}
+

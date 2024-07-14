@@ -41,6 +41,7 @@ namespace DomainServices.Services
             _httpContextAccessor = httpContextAccessor;
             _viewRender = viewRender;
             _userRepositoy = userRepositoy;
+            _unitOfWork = unitOfWork;
         }
 
         public bool IsExistUserName(string userName)
@@ -119,7 +120,7 @@ namespace DomainServices.Services
             };
 
             string body = _viewRender.RenderToStringAsync("_ActiveEmail", user);
-            SendEmail.Send(user.Email, "فعالسازی", body);
+            await SendEmail.Send(user.Email, "فعالسازی", body);
 
             await CreateAsync(user);
             return message;
@@ -144,7 +145,7 @@ namespace DomainServices.Services
                 return false;
 
             user.Password = reset.Password;
-            UpdateAsync(user);
+            await UpdateAsync(user);
 
             return true;
         }
@@ -158,7 +159,7 @@ namespace DomainServices.Services
                 return false;
 
             string bodyEmail = _viewRender.RenderToStringAsync("_ForgotPassword", user);
-            SendEmail.Send(user.Email, "بازیابی کلمه عبور", bodyEmail);
+            await SendEmail.Send(user.Email, "بازیابی کلمه عبور", bodyEmail);
 
             return true;
 
@@ -248,13 +249,14 @@ namespace DomainServices.Services
             }
             
             #endregion
+            
             return AddUser(user);
         }
 
         public int AddUser(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            Create(user);
+            _unitOfWork.Commit();
             return user.Id;
         }
 

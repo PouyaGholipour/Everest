@@ -37,7 +37,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Comment", b =>
@@ -92,7 +92,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Course", b =>
@@ -156,7 +156,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.CourseUser", b =>
@@ -171,7 +171,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseUsers");
+                    b.ToTable("CourseUsers", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Journal", b =>
@@ -202,7 +202,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Journals");
+                    b.ToTable("Journals", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Prog", b =>
@@ -269,7 +269,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Progs");
+                    b.ToTable("Progs", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Report", b =>
@@ -307,7 +307,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Role", b =>
@@ -324,7 +324,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.RoleUser", b =>
@@ -339,7 +339,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleUsers");
+                    b.ToTable("RoleUsers", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.User", b =>
@@ -422,7 +422,7 @@ namespace InfrastructureLayer.Migrations
 
                     b.HasIndex("ProgId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.Comment", b =>

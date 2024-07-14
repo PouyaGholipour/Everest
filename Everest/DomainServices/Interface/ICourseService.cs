@@ -1,4 +1,6 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.DTOs.Course;
+using DomainLayer.DTOs.User;
+using DomainLayer.Entities;
 using DomainLayer.MainInterfaces;
 using System;
 using System.Collections.Generic;
@@ -11,5 +13,11 @@ namespace DomainServices.Interface
     public interface ICourseService : IRepository<Course>
     {
         // Definition private function model
+
+        Task<CourseListViewModel> GetCourseList(int pageId = 1, string courseTitleFilter = "");
+        Task AddCourse(AddCourseViewModel addCourse);
+        Task<EditCourseViewModel> GetCourseForShowEditMode(int courseId);
+        Task EditCourseFromAdmin(EditCourseViewModel editCourse);
+        void DeleteCourse(int courseId);
     }
 }

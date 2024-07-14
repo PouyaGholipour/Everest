@@ -9,6 +9,10 @@ namespace DomainLayer.Entities
 {
     public class Course
     {
+        public Course()
+        {
+
+        }
         public int Id { get; set; }
         public string CourseTitle { get; set; }
         public string Description { get; set; }
@@ -26,10 +30,10 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation property
 
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
         public int CategoryId { get; set; }
-        public ICollection<CourseUser> CourseUsers { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<CourseUser>? CourseUsers { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
 
         #endregion
     }

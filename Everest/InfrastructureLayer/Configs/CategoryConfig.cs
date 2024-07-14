@@ -16,6 +16,7 @@ namespace InfrastructureLayer.Configs
             builder.HasKey(c => c.Id);
             builder.Property(c => c.CategoryName).IsRequired(true)
                 .HasColumnType("nvarchar").HasMaxLength(150);
+            
         }
     }
 }
