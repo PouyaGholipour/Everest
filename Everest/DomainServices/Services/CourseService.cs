@@ -54,7 +54,7 @@ namespace DomainServices.Services
             course.Pirce = Convert.ToDecimal(addCourse.Pirce);
             course.CourseType = addCourse.CourseType;
             course.DateOfHolding = DateTime.Parse(addCourse.DateOfHolding);
-            course.CategoryId = addCourse.CategoryId;
+            course.CategoryId = 1;
             course.Status = addCourse.Status;
             course.WhichCoursePrerequisites = addCourse.WhichCoursePrerequisites;
             course.PrerequisiteCourse = addCourse.PrerequisiteCourse;
@@ -101,7 +101,7 @@ namespace DomainServices.Services
 
         public async Task EditCourseFromAdmin(EditCourseViewModel editCourse)
         {
-            var newCourse = new Course();
+            var newCourse = await GetAsync(c => c.Id == editCourse.CourseId);
             newCourse.ImageName = editCourse.CourseImage;
             newCourse.CourseTitle = editCourse.CourseTitle;
             newCourse.Description = editCourse.Description;
@@ -131,7 +131,7 @@ namespace DomainServices.Services
 
             #endregion
 
-            await CreateAsync(newCourse);
+            await UpdateAsync(newCourse);
             await _unitOfWork.CommitAsync();
         }
 

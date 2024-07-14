@@ -1,0 +1,128 @@
+﻿@using DomainLayer.DTOs.Prog
+@model EditProgViewModel
+@{
+    ViewData["Title"] = "ویرایش برنامه";
+}
+
+<h1>ویرایش برنامه</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header BTN-PANEL text-white">اطلاعات دوره جدید</div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <!-- Id Field (Hidden) -->
+                    <input type="hidden" name="Id" value="1">
+
+                    <!-- عنوان برنامه -->
+                    <div class="form-group">
+                        <label asp-for="Title" for="Title">عنوان برنامه</label>
+                        <input asp-for="Title" type="text" class="form-control" id="Title" name="Title"  required="">
+                    </div>
+
+                    <!-- توضیحات -->
+                    <div class="form-group">
+                        <label asp-for="Description" for="Description">توضیحات</label>
+                        <textarea asp-for="Description" class="form-control" id="Description" name="Description" rows="4" required="">توضیحات</textarea>
+                    </div>
+
+                    <!-- نام سرپرست -->
+                    <div class="form-group">
+                        <label asp-for="LeaderName" for="LeaderName">نام سرپرست</label>
+                        <input asp-for="LeaderName" type="text" class="form-control" id="LeaderName" name="LeaderName" required="">
+                    </div>
+
+                    <!-- محل برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="Place" for="Place">محل برگزاری</label>
+                        <input asp-for="Place" type="text" class="form-control" id="Place" name="Place" required="">
+                    </div>
+
+                    <!-- پیش نیازهای برنامه -->
+                    <div class="form-group">
+                        <label asp-for="WhichProgramPrerequisites" for="WhichProgramPrerequisites">پیش نیازهای برنامه</label>
+                        <input asp-for="WhichProgramPrerequisites" type="text" class="form-control" id="WhichProgramPrerequisites" name="WhichProgramPrerequisites">
+                    </div>
+
+                     <!-- دوره‌های پیش نیاز -->
+                    <div class="form-group">
+                        <label asp-for="PrerequisiteCourse" for="PrerequisiteCourse">دوره‌های پیش نیاز</label>
+                        <input asp-for="PrerequisiteCourse" type="text" class="form-control" id="PrerequisiteCourse" name="PrerequisiteCourse" >
+                    </div>
+
+                    <!-- برنامه ‌های پیش نیاز -->
+                    <div class="form-group">
+                        <label asp-for="PrerequisitePrograms" for="PrerequisitePrograms">برنامه ‌های پیش نیاز</label>
+                        <input asp-for="PrerequisitePrograms" type="text" class="form-control" id="PrerequisitePrograms" name="PrerequisitePrograms" >
+                    </div>
+
+                    <!-- انتخاب تصویر -->
+                    <div class="form-group">
+                        <img id="ProgImagePreview" src="/ProgImage/@Model.ProgImage" alt="Course Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
+                    </div>
+
+                    <!-- قیمت -->
+                    <div class="form-group">
+                        <label asp-for="Price" for="Pirce">قیمت</label>
+                        <input asp-for="Price" type="number" class="form-control" id="Price" name="Price" required="">
+                    </div>
+
+                    <!-- وضعیت -->
+                    <div class="form-group">
+                        <label asp-for="Status" for="Status">وضعیت</label>
+                        <div>
+                            <input type="radio" asp-for="Status" name="Status" Value="true" class="@((Model.Status == true) ? "active" : "")"/>
+                            <label asp-for="Status" for="Status" >فعال</label>
+                        </div>
+                        <div>
+                            <input type="radio" asp-for="Status" name="Status" Value="false" class="@((Model.Status == true) ? "active" : "")"/>
+                            <label asp-for="Status" for="Status" >غیر فعال</label>
+                        </div>
+                    </div>
+
+                    <!-- تاریخ برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="DateOfHolding" for="DateOfHolding">تاریخ برگزاری</label>
+                        <input asp-for="DateOfHolding" type="text" class="form-control" id="DateOfHolding" name="DateOfHolding" required="">
+                    </div>
+
+                    <!-- نوع برنامه -->
+                    <div class="form-group">
+                        <label asp-for="ProgramType" for="ProgramType">نوع برنامه</label>
+                        <select asp-for="ProgramType" class="form-control" id="ProgramType" name="ProgramType" required="">
+                            <option value="1">آسان</option>
+                            <option value="2">متوسط</option>
+                            <option value="3">سخت</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#ProgImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageName").change(function() {
+            readURL(this);
+        });
+    </script>
+}

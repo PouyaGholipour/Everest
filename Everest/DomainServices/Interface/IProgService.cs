@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.DTOs.Prog;
+using DomainLayer.Entities;
 using DomainLayer.MainInterfaces;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,10 @@ namespace DomainServices.Interface
     public interface IProgService : IRepository<Prog>
     {
         // Definition private function model
+        ProgListViewModel GetPagedList(int pageId, string progTitleFilter);
+        Task AddProg(AddProgViewModel addProg);
+        Task<EditProgViewModel> GetProgForShowEditMode(int progId);
+        Task EditProg(EditProgViewModel editProg);
+        void RemoveProg(int progId);
     }
 }

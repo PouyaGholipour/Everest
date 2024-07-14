@@ -56,7 +56,6 @@ namespace DomainLayer.DTOs.Course
 
         [Display(Name = "وضعیت")]
         [Required(ErrorMessage = "لطفا{0} را وارد کنید")]
-        [MaxLength(150, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
         public bool Status { get; set; }
         public string DateOfHolding { get; set; }
         public CourseType CourseType { get; set; }

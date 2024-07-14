@@ -1,0 +1,48 @@
+﻿@using DomainLayer.DTOs.Prog
+@model ProgListViewModel
+@{
+    ViewData["Title"] = "لیست برنامه ها";
+}
+
+<h1>لیست برنامه ها</h1>
+
+<div class="row" style="margin:10px 0">
+    <form method="get">
+        <div class="col-sm-5 col-md-6">
+            <input type="text" name="ProgTitleFilter" class="form-control" placeholder="نام دوره" />
+        </div>
+        <div class="col-sm-2 col-md-6">
+            <button type="submit" class="btn btn-info">جستجو</button>
+            <a class="btn btn-default btn-sm" href="/Admin/Prog/GetPagedList">پاک کردن</a>
+        </div>
+    </form>
+</div>
+
+<div class="container mt-5 table-container">
+    <table class="table table-striped table-hover mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">عنوان دوره</th>
+                <th scope="col">تاریخ برگزاری</th>
+                <th scope="col">مدیریت دوره</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var prog in Model.Progs)
+            {
+                <tr>
+                    <td>@prog.Title</td>
+                    <td>@prog.DateOfHolding.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-controller="Prog" asp-action="DeleteProg" asp-route-ProgId="@prog.Id" class="btn btn-primary BTN-PANEL">حذف</a>
+                        <a asp-controller="Prog" asp-action="EditProg" asp-route-ProgId="@prog.Id" class="btn btn-primary BTN-PANEL">ویرایش</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <a href="/Admin/Prog/AddProg" type="button" class="btn btn-primary BTN-PANEL" id="newBtn">برنامه جدید</a>
+        <a type="button" class="btn btn-secondary mx-3" id="cancelBtn">انصراف</a>
+    </div>
+</div>

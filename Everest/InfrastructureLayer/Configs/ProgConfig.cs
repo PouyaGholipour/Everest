@@ -31,6 +31,7 @@ namespace InfrastructureLayer.Configs
 
             builder.HasOne(p => p.Category)
                 .WithMany(c => c.Progs).HasForeignKey(p => p.CategoryId);
+
         }
     }
 }

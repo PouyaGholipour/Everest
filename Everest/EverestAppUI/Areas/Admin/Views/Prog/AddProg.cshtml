@@ -1,11 +1,10 @@
-﻿@using DomainLayer.DTOs.Course
-@using DomainLayer.Helper
-@model AddCourseViewModel
+﻿@using DomainLayer.DTOs.Prog
+@model AddProgViewModel
 @{
-    ViewData["Title"] = "افزودن دوره";
+    ViewData["Title"] = "برنامه جدید";
 }
 
-<h1>افزودن دوره جدید</h1>
+<h1>برنامه جدید</h1>
 
 <div class="row justify-content-center">
     <div class="col-md-8">
@@ -17,25 +16,25 @@
                     <!-- Id Field (Hidden) -->
                     <input type="hidden" name="Id" value="1">
 
-                    <!-- عنوان دوره -->
+                    <!-- عنوان برنامه -->
                     <div class="form-group">
-                        <label asp-for="CourseTitle" for="CourseTitle">عنوان دوره</label>
-                        <input asp-for="CourseTitle" type="text" class="form-control" id="CourseTitle" name="CourseTitle" value="عنوان دوره" required="">
-                        <span asp-validation-for="CourseTitle" class="text-danger"></span>
+                        <label asp-for="Title" for="Title">عنوان برنامه</label>
+                        <input asp-for="Title" type="text" class="form-control" id="Title" name="Title" value="عنوان برنامه" required="">
+                        <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
 
                     <!-- توضیحات -->
                     <div class="form-group">
                         <label asp-for="Description" for="Description">توضیحات</label>
-                        <textarea asp-for="Description" class="form-control" id="Description" name="Description" rows="4" required="">توضیحات دوره</textarea>
+                        <textarea asp-for="Description" class="form-control" id="Description" name="Description" rows="4" required="">توضیحات</textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
-                    <!-- نام مربی -->
+                    <!-- نام سرپرست -->
                     <div class="form-group">
-                        <label asp-for="CoachName" for="CoachName">نام مربی</label>
-                        <input asp-for="CoachName" type="text" class="form-control" id="CoachName" name="CoachName" value="نام مربی" required="">
-                        <span asp-validation-for="CoachName" class="text-danger"></span>
+                        <label asp-for="LeaderName" for="LeaderName">نام سرپرست</label>
+                        <input asp-for="LeaderName" type="text" class="form-control" id="LeaderName" name="LeaderName" value="نام سرپرست"  required="">
+                        <span asp-validation-for="LeaderName" class="text-danger"></span>
                     </div>
 
                     <!-- محل برگزاری -->
@@ -45,31 +44,38 @@
                         <span asp-validation-for="Place" class="text-danger"></span>
                     </div>
 
-                    <!-- پیش نیازهای دوره -->
+                    <!-- پیش نیازهای برنامه -->
                     <div class="form-group">
-                        <label asp-for="WhichCoursePrerequisites" for="WhichCoursePrerequisites">پیش نیازهای دوره</label>
-                        <input asp-for="WhichCoursePrerequisites" type="text" class="form-control" id="WhichCoursePrerequisites" name="WhichCoursePrerequisites" value="پیش نیازهای دوره">
-                        <span asp-validation-for="WhichCoursePrerequisites" class="text-danger"></span>
+                        <label asp-for="WhichProgramPrerequisites" for="WhichProgramPrerequisites">پیش نیازهای برنامه</label>
+                        <input asp-for="WhichProgramPrerequisites" type="text" class="form-control" id="WhichProgramPrerequisites" name="WhichProgramPrerequisites" value="پیش نیازهای برنامه ">
                     </div>
 
-                    <!-- دوره‌های پیش نیاز -->
+                     <!-- دوره‌های پیش نیاز -->
                     <div class="form-group">
                         <label asp-for="PrerequisiteCourse" for="PrerequisiteCourse">دوره‌های پیش نیاز</label>
                         <input asp-for="PrerequisiteCourse" type="text" class="form-control" id="PrerequisiteCourse" name="PrerequisiteCourse" value="دوره‌های پیش نیاز">
                         <span asp-validation-for="PrerequisiteCourse" class="text-danger"></span>
                     </div>
 
+                    <!-- برنامه ‌های پیش نیاز -->
+                    <div class="form-group">
+                        <label asp-for="PrerequisitePrograms" for="PrerequisitePrograms">برنامه ‌های پیش نیاز</label>
+                        <input asp-for="PrerequisitePrograms" type="text" class="form-control" id="PrerequisitePrograms" name="PrerequisitePrograms" value="برنامه ‌های پیش نیاز">
+                        <span asp-validation-for="PrerequisitePrograms" class="text-danger"></span>
+                    </div>
+
                     <!-- انتخاب تصویر -->
                     <div class="form-group">
-                        <img id="CourseImagePreview" src="/CourseImage/Default.jpg" alt="Course Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <img id="ProgImagePreview" src="/ProgImage/Default.jpg" alt="Course Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
                         <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
+                        <span asp-validation-for="ImageName" class="text-danger"></span>
                     </div>
 
                     <!-- قیمت -->
                     <div class="form-group">
-                        <label asp-for="Pirce" for="Pirce">قیمت</label>
-                        <input asp-for="Pirce" type="number" class="form-control" id="Pirce" name="Pirce" value="100000" required="">
-                        <span asp-validation-for="Pirce" class="text-danger"></span>
+                        <label asp-for="Price" for="Pirce">قیمت</label>
+                        <input asp-for="Price" type="number" class="form-control" id="Price" name="Price" value="100000" required="">
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
 
                     <!-- وضعیت -->
@@ -77,13 +83,12 @@
                         <label asp-for="Status" for="Status">وضعیت</label>
                         <div>
                             <input type="radio" asp-for="Status" name="Status" Value="true"/>
-                            <label asp-for="Status" for="Status">فعال</label>
+                            <label asp-for="Status" for="Status" >فعال</label>
                         </div>
                         <div>
                             <input type="radio" asp-for="Status" name="Status" Value="false"/>
-                            <label asp-for="Status" for="Status">غیر فعال</label>
+                            <label asp-for="Status" for="Status" >غیر فعال</label>
                         </div>
-                        <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
 
                     <!-- تاریخ برگزاری -->
@@ -93,18 +98,17 @@
                         <span asp-validation-for="DateOfHolding" class="text-danger"></span>
                     </div>
 
-                    <!-- نوع دوره -->
+                    <!-- نوع برنامه -->
                     <div class="form-group">
-                        <label asp-for="CourseType" for="CourseType">نوع دوره</label>
-                        <select asp-for="CourseType" class="form-control" id="CourseType" name="CourseType" required="">
-                            <option value="1">کوهپیمایی</option>
-                            <option value="2">سنگ نوردی</option>
-                            <option value="3">یخ نوردی</option>
-                            <option value="4">امداد و نجات</option>
+                        <label asp-for="ProgramType" for="ProgramType">نوع برنامه</label>
+                        <select asp-for="ProgramType" class="form-control" id="ProgramType" name="ProgramType" required="">
+                            <option value="1">آسان</option>
+                            <option value="2">متوسط</option>
+                            <option value="3">سخت</option>
                         </select>
-                        <span asp-validation-for="CourseType" class="text-danger"></span>
+                        <span asp-validation-for="ProgramType" class="text-danger"></span>
                     </div>
-                    <!-- دکمه ذخیره -->
+
                     <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
                 </form>
             </div>
@@ -121,7 +125,7 @@
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
-                    $('#CourseImagePreview').attr('src', e.target.result);
+                    $('#ProgImagePreview').attr('src', e.target.result);
                 }
 
                 reader.readAsDataURL(input.files[0]);

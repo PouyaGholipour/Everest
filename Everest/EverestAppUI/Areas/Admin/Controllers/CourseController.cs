@@ -31,6 +31,8 @@ namespace EverestAppUI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCourse(AddCourseViewModel courseViewModel)
         {
+            if (!ModelState.IsValid)
+                return View(courseViewModel);
             try
             {
                 await _courseService.AddCourse(courseViewModel);
@@ -99,5 +101,6 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 return Redirect("/Admin/Course/GetPagedList");
             }
         }
+
     }
 }
