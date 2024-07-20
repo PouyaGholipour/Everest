@@ -21,6 +21,7 @@ using TopLearn.Core.Generators;
 using TopLearn.Core.Convertors;
 using TopLearn.Core.Senders;
 using Microsoft.AspNetCore.Mvc;
+using DomainServices.Exception;
 
 namespace DomainServices.Services
 {
@@ -44,28 +45,22 @@ namespace DomainServices.Services
             _unitOfWork = unitOfWork;
         }
 
-        public bool IsExistUserName(string userName)
-        {
-            return _context.Users.Any(x => x.UserName == userName);
+        public bool IsExistUserName(string userName) => _context.Users.Any(x => x.UserName == userName);
 
-        }
+        public bool IsExistEmail(string email) =>  _context.Users.Any(x => x.Email == email);
 
-        public bool IsExistEmail(string email)
-        {
-            return _context.Users.Any(x => x.Email == email);
-        }
-
-        public async Task<ClientMessageType> LoginUser(LoginViewModel login)
-        {
-            var message = ClientMessageType.Default;
-                
+        public async Task<ServiceException> LoginUser(LoginViewModel login)
+        {                
             string email = FixText.FixEmail(login.Email);
             string password = login.Password;
 
             var user = _context.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
 
-            if(user == null)
-                return message = ClientMessageType.Null;
+            if (user == null)
+                return ServiceException.Create(
+                    type: "NotFound",
+                    title: "موجودیت یافت نشد",
+                    detail: "کاربر مورد نظر یافت نشد");
 
             if (user.IsActive)
             {
@@ -83,10 +78,16 @@ namespace DomainServices.Services
                     IsPersistent = login.RememberMe
                 };
                 await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
-                return message = ClientMessageType.Success;
+                return ServiceException.Create(
+                    type: "Success",
+                    title: "عملیات موفق",
+                    detail: "ورود با موفقیت انجام شد.");
             }
             else
-                return message = ClientMessageType.IsNotActive;
+                return ServiceException.Create(
+                    type: "NotActive",
+                    title: "عملیات نا موفق",
+                    detail: "حساب کاربری شما فعال نمی باشد.");
         }
 
         public void DeleteFromDataBase(int id)
@@ -94,20 +95,35 @@ namespace DomainServices.Services
             // پیاده‌سازی حذف کاربر از پایگاه داده
             throw new NotImplementedException();
         }
-        public async Task<ClientMessageType> AddUser(RegisterViewModel register)
+        public async Task<ServiceException> AddUser(RegisterViewModel register)
         {
-            var message = ClientMessageType.Default;
+            // Register Dto is null
             if (register == null)
-                return message = ClientMessageType.Null;
-
+                return ServiceException.Create(
+                type: "ValidationError",
+                title: "اطلاعات یافت نشد",
+                detail: "اطلاعات یافت نشد");
+                
+            // Email and Username is exist
             if (IsExistEmail(register.Email) && IsExistUserName(register.UserName))
-                return message = ClientMessageType.UsernameEmaliIsExist;
+                return ServiceException.Create(
+                type: "ValidationError",
+                title: "مشخضات",
+                detail: "این نام کاربری و ایمیل قبلا استفاده شده است.");
 
+            // Username is exist
             if (IsExistUserName(register.UserName))
-                return message = ClientMessageType.UsernameIsExist;
+                return ServiceException.Create(
+                type: "ValidationError",
+                title: "نام کاربری",
+                detail: "این نام کاربری قبلا استفاده شده است.");
 
+            // Email is exist
             if (IsExistEmail(register.Email))
-                return message = ClientMessageType.EmailIsExist;
+                return ServiceException.Create(
+                type: "ValidationError",
+                title: "ایمیل",
+                detail: "ایمیل وارد شده قبلا توسط کاربری استفاده شده است");
 
             var user = new User()
             {
@@ -123,7 +139,10 @@ namespace DomainServices.Services
             await SendEmail.Send(user.Email, "فعالسازی", body);
 
             await CreateAsync(user);
-            return message;
+            return ServiceException.Create(
+                type: "Success",
+                title: "ایمیل",
+                detail: "عملیات ثبت نام با موفقیت انجام شد");
         }
 
         public bool ActiveAccount(string activeCode)
@@ -203,16 +222,25 @@ namespace DomainServices.Services
             return viewModel;
         }
 
-        public void DeleteUser(int id)
+        public ServiceException DeleteUser(int id)
         {
             var user = GetById(id);
+            if (user == null)
+                return ServiceException.Create(
+                    type: "NotFound",
+                    title: "موجودیت یافت نشد",
+                    detail: "کاربری با این شناسه کاربری یافت نشد.");
+
             user.IsDelete = true;
             Update(user);
+            return ServiceException.Create(
+                    type: "Success",
+                    title: "عملیات موفق",
+                    detail: "عملیات حذف با موفقیت انجام شد");
         }
 
         public async Task<int> CreateUserFromAdmin(CreateUserViewModel createUser, List<int> SelectedRoles)
         {
-            
             User user = new User();
             user.Email = createUser.Email;
             user.UserName = createUser.UserName;
@@ -260,9 +288,15 @@ namespace DomainServices.Services
             return user.Id;
         }
 
-        public async Task EditUserFromAdmin(EditUserViewModel editUser)
+        public async Task<ServiceException> EditUserFromAdmin(EditUserViewModel editUser)
         {
             User user = await _userRepositoy.GetUserWithRolesByIdAsync(editUser.UserId);
+
+            if (user == null)
+                return ServiceException.Create(type:"NotFound",
+                    title:"کاربر یافت نشد",
+                    detail:"موجودیتی با این شناسه کاربری یافت نشد");
+
             user.Email = editUser.Email;
             
             if(string.IsNullOrEmpty(editUser.Password))
@@ -292,6 +326,9 @@ namespace DomainServices.Services
             #endregion
 
             await UpdateAsync(user);
+            return ServiceException.Create(type: "Found",
+                    title: "کاربر با موفقیت یافت شد",
+                    detail: "موجودیتی با این شناسه کاربری یافت شد");
         }
     }
 }

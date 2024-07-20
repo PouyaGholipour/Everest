@@ -1,4 +1,5 @@
 ﻿using DomainLayer.DTOs.Course;
+using DomainServices.Exception;
 using DomainServices.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +20,30 @@ namespace EverestAppUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetPagedList(int pageId = 1, string CourseTitleFilter = "")
         {
-            var courseListModel = await _courseService.GetCourseList(pageId, CourseTitleFilter);
-            return View(courseListModel);
+            try
+            {
+                var courseListModel = await _courseService.GetCourseList(pageId, CourseTitleFilter);
+                return View(courseListModel);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری لیست دوره ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = exception.Detail;
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/Admin/Admin/Index/");
+            }
         }
 
-        public async Task<IActionResult> AddCourse()
+        public IActionResult AddCourse()
         {
             return View();
         }
@@ -38,13 +58,18 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 await _courseService.AddCourse(courseViewModel);
                 return Redirect("/Admin/Course/GetPagedList");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام اضافه کردن دوره خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام اضافه کردن دوره جدید خطایی روی داد. لطفا دوباره تلاش کنید.");
 
-                if (ex.InnerException != null)
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return View(courseViewModel);
@@ -55,6 +80,15 @@ namespace EverestAppUI.Areas.Admin.Controllers
         [Route("/Admin/Course/EditCourse/{id?}")]
         public async Task<IActionResult> EditCourse(int courseId)
          {
+            if(courseId == 0)
+            {
+                var exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری اطلاعات دوره خطایی روی داد. لطفا دوباره تلاش کنید.");
+                ViewBag.error = $"{exception.Detail}";
+                return Redirect("/Admin/Course/GetPagedList");
+            }
             var editCourseViewModel = await _courseService.GetCourseForShowEditMode(courseId);
             return View(editCourseViewModel);
         }
@@ -65,16 +99,27 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             try
             {
-                await _courseService.EditCourseFromAdmin(courseViewModel);
+                var result = await _courseService.EditCourseFromAdmin(courseViewModel);
+
+                if(result.Type =="Success")
+                    ViewBag.result = $"{result.Detail}";
+                else
+                    ViewBag.error = $"{result.Detail}";
+
                 return Redirect("/Admin/Course/GetPagedList");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام ویرایش کردن دوره خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام ویرایش دوره خطایی روی داد. لطفا دوباره تلاش کنید.");
 
-                if (ex.InnerException != null)
+                ViewBag.error = exception.Detail;
+
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return View(courseViewModel);
@@ -86,16 +131,24 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             try
             {
-                _courseService.DeleteCourse(courseId);
+                var result = _courseService.DeleteCourse(courseId);
+
+                if (result.Type == "NotFound")
+                    ViewBag.error = $"{result.Detail}";
+
                 return Redirect("/Admin/Course/GetPagedList");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام ویرایش کردن دوره خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام حذف دوره خطایی روی داد. لطفا دوباره تلاش کنید.");
+                ViewBag.error = $"{exception.Detail}";
 
-                if (ex.InnerException != null)
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return Redirect("/Admin/Course/GetPagedList");

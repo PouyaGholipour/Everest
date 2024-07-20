@@ -1,6 +1,7 @@
 ﻿using DomainLayer.DTOs.Prog;
 using DomainLayer.Entities;
 using DomainLayer.MainInterfaces;
+using DomainServices.Exception;
 using DomainServices.Interface;
 using InfrastructureLayer.ApplicationDbContext;
 using InfrastructureLayer.MainServices;
@@ -101,9 +102,16 @@ namespace DomainServices.Services
             return editProgViewModel;
         }
 
-        public async Task EditProg(EditProgViewModel editProg)
+        public async Task<ServiceException> EditProg(EditProgViewModel editProg)
         {
             var program = await GetAsync(p => p.Id == editProg.ProgId);
+
+            if(program == null)
+                return ServiceException.Create(
+                    type: "NotFound",
+                    title: "موجودیت یافت نشد.",
+                    detail: "برنامه ای با این شناسه موجودیت یافت نشد.");
+
             program.Title = editProg.Title;
             program.Description = editProg.Description;
             program.LeaderName = editProg.LeaderName;
@@ -134,13 +142,30 @@ namespace DomainServices.Services
 
             await UpdateAsync(program);
             await _unitOfWork.CommitAsync();
+
+            return ServiceException.Create(
+                    type: "Success",
+                    title: "عملیات موفق.",
+                    detail: "عملیات ویرایش برنامه با موفقیت انجام شد.");
         }
 
-        public void RemoveProg(int progId)
+        public ServiceException RemoveProg(int progId)
         {
             var program = GetById(progId);
+
+            if(program == null)
+                return ServiceException.Create(
+                    type: "NotFound",
+                    title: "عملیات ناموفق.",
+                    detail: "عملیات حذف برنامه با شکست مواجه شد.");
+
             program.IsDelete = true;
             _unitOfWork.Commit();
+
+            return ServiceException.Create(
+                    type: "Success",
+                    title: "عملیات موفق.",
+                    detail: "عملیات حذف برنامه با موفقیت انجام شد.");
         }
     }
 }

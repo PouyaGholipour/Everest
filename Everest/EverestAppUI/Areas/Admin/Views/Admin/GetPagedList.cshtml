@@ -7,6 +7,22 @@
 
 <h1>لیست کاربران</h1>
 
+
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if(!string.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+@if(!string.IsNullOrEmpty(ViewBag.NotFound))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+
 <div class="row" style="margin:10px 0">
     <form method="get">
         <div class="col-sm-5 col-md-5">

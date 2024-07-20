@@ -13,13 +13,21 @@ namespace EverestAppUI.Controllers
 {
     public class UserController : Controller
     {
+        #region Field
         private readonly IUserService _userService;
         private readonly IUnitOfWork _unitOfWork;
+        #endregion
+
+        #region Constructor
         public UserController(IUserService userService, IUnitOfWork unitOfWork)
         {
             _userService = userService;
             _unitOfWork = unitOfWork;
         }
+        #endregion
+
+        #region CRUD Operation
+
         public IActionResult Index()
         {
             return View();
@@ -40,19 +48,11 @@ namespace EverestAppUI.Controllers
 
             var result = await _userService.LoginUser(login);
 
-            switch(result)
-            {
-                case ClientMessageType.Null:
-                    ModelState.AddModelError("Email", "کاربری با این ایمیل یافت نشد!");
-                    return View(login);
-                    break;
-                case ClientMessageType.IsNotActive:
-                    ViewBag.IsActive = false;
-                    break;
-                case ClientMessageType.Success:
-                    ViewBag.IsSuccess = true;
-                    break;
-            }
+            if(result.Type == "Success")
+                ViewBag.IsSuccess = true;
+
+            else
+                ViewData["message"] = $"{result.Detail}";
 
             return View(login);
         }
@@ -75,28 +75,16 @@ namespace EverestAppUI.Controllers
             if (!ModelState.IsValid)
                 return View(register);
 
-            ClientMessageType message = await _userService.AddUser(register);
+            var message = await _userService.AddUser(register);
 
-            switch (message)
+            if(message.Type == "Success")
+                ViewBag.IsSuccess = true;
+
+            else
             {
-                case ClientMessageType.UsernameIsExist:
-                    ModelState.AddModelError("UserName", "این نام کاربری قبلا استفاده شده است");
-                    return View(register);
-                    break;
-
-                case ClientMessageType.EmailIsExist:
-                    ModelState.AddModelError("Email", "ایمیل وارد شده قبلا استفاده شده است");
-                    return View(register);
-                    break;
-                
-                case ClientMessageType.UsernameEmaliIsExist:
-                    ModelState.AddModelError("Email", "ایمیل وارد شده قبلا استفاده شده است");
-                    ModelState.AddModelError("UserName", "این نام کاربری قبلا استفاده شده است");
-                    return View(register);
-                    break;
+                ViewData["message"] = $"{message.Detail}";
+                return View(register);
             }
-
-            ViewBag.IsSuccess = true;
 
             return View("SuccessRegister", register);
         }
@@ -153,5 +141,7 @@ namespace EverestAppUI.Controllers
             else
                 return RedirectToAction("LoginPage", "User");
         }
+
+        #endregion
     }
 }

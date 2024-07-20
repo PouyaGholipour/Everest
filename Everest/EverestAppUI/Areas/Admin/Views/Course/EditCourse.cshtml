@@ -6,6 +6,20 @@
 
 <h1>ویرایش دوره</h1>
 
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if(!string.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+@if(!string.IsNullOrEmpty(ViewBag.result))
+{
+    <div class="alert alert-danger">
+        @ViewBag.result
+    </div>
+}
+
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">

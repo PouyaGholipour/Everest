@@ -1,0 +1,83 @@
+﻿@using DomainLayer.DTOs.Report
+@model EditReportViewModel
+@{
+    ViewData["Title"] = "ویرایش گزارش";
+}
+
+<h1>ویرایش گزارش</h1>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if(!string.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header BTN-PANEL text-white">اطلاعات دوره جدید</div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <!-- Id Field (Hidden) -->
+                    <input asp-for="ReportId" type="hidden">
+
+                    <!-- عنوان برنامه -->
+                    <div class="form-group">
+                        <label asp-for="ReportTitle" for="ReportTitle">عنوان گزارش</label>
+                        <input asp-for="ReportTitle" type="text" class="form-control" id="ReportTitle" name="ReportTitle"  required="">
+                    </div>
+
+                    <!-- توضیحات -->
+                    <div class="form-group">
+                        <label asp-for="ReportContent" for="ReportContent">محتوا</label>
+                        <textarea asp-for="ReportContent" class="form-control" id="ReportContent" name="ReportContent" rows="4" required="">محتوا</textarea>
+                    </div>
+
+                    <!-- محل برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="Place" for="Place">محل برگزاری</label>
+                        <input asp-for="Place" type="text" class="form-control" id="Place" name="Place" required="">
+                    </div>
+
+                    <!-- انتخاب تصویر -->
+                    <div class="form-group">
+                        <img id="ProgImagePreview" src="/ReportImage/@Model.ReportImage" alt="Report Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
+                    </div>
+
+                    <!-- تاریخ برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="DateOfHolding" for="DateOfHolding">تاریخ برگزاری</label>
+                        <input asp-for="DateOfHolding" type="text" class="form-control" id="DateOfHolding" name="DateOfHolding" required="">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#ProgImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageName").change(function() {
+            readURL(this);
+        });
+    </script>
+}

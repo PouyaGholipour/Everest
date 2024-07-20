@@ -1,4 +1,5 @@
 ﻿using DomainLayer.DTOs.Prog;
+using DomainServices.Exception;
 using DomainServices.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,13 +25,17 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 var viewModel = _progService.GetPagedList(pageId, progTitleFilter);
                 return View(viewModel);
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام بارگذاری برنامه ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری لیست برنامه ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+                ViewBag.error = $"{exception.Detail}";
 
-                if (ex.InnerException != null)
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return Redirect("/Admin/Admin/Index/");
@@ -51,19 +56,20 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 return View(addProgViewModel);
             try
             {
-                if (!ModelState.IsValid)
-                    return View(addProgViewModel);
-
                 await _progService.AddProg(addProgViewModel);
                 return Redirect("/Admin/Prog/GetPagedList/");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام اضافه کردن برنامه ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام اضافه کردن برنامه جدید خطایی روی داد. لطفا دوباره تلاش کنید.");
+                ViewBag.error = $"{exception.Detail}";
 
-                if (ex.InnerException != null)
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return View(addProgViewModel);
@@ -73,6 +79,17 @@ namespace EverestAppUI.Areas.Admin.Controllers
         [Route("/Admin/Prog/EditProg/{id?}")]
         public async Task<IActionResult> EditProg(int progId)
         {
+            if(progId == 0)
+            {
+                var exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری اظلاعات برنامه خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Detail}";
+
+                return Redirect("/Admin/Prog/GetPagedList/");
+            }
             var progViewModel = await _progService.GetProgForShowEditMode(progId);
             return View(progViewModel);
         }
@@ -83,16 +100,24 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             try
             {
-                await _progService.EditProg(editProgViewModel);
+                var result = await _progService.EditProg(editProgViewModel);
+                if (result.Type == "NotFound")
+                    ViewBag.error = $"{result.Detail}";
+
                 return Redirect("/Admin/Prog/GetPagedList/");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام ویرایش برنامه ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام ویرایش برنامه خطایی روی داد. لطفا دوباره تلاش کنید.");
 
-                if (ex.InnerException != null)
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return View(editProgViewModel);
@@ -104,16 +129,18 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             try
             {
-                _progService.RemoveProg(progId);
+                var result = _progService.RemoveProg(progId);
+                if (result.Type == "NotFound")
+                    ViewBag.error = $"{result.Detail}";
                 return Redirect("/Admin/Prog/GetPagedList/");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "هنگام ویرایش برنامه ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+                ViewBag.error = "هنگام حذف برنامه خطایی روی داد. لطفا دوباره تلاش کنید.";
 
                 if (ex.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + ex.InnerException.Message;
                 }
 
                 return Redirect("/Admin/Prog/GetPagedList/");

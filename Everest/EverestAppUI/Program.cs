@@ -2,6 +2,7 @@ using DomainLayer.Entities;
 using DomainLayer.MainInterfaces;
 using DomainServices.Interface;
 using DomainServices.Services;
+using EverestAppUI.Middleware;
 using InfrastructureLayer.ApplicationDbContext;
 using InfrastructureLayer.MainServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IProgService, ProgService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IViewRenderService, RenderViewToString>();
@@ -62,6 +64,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

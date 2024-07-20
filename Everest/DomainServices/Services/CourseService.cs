@@ -2,6 +2,7 @@
 using DomainLayer.DTOs.User;
 using DomainLayer.Entities;
 using DomainLayer.MainInterfaces;
+using DomainServices.Exception;
 using DomainServices.Interface;
 using InfrastructureLayer.ApplicationDbContext;
 using InfrastructureLayer.MainServices;
@@ -99,9 +100,16 @@ namespace DomainServices.Services
             return viewModel;
         }
 
-        public async Task EditCourseFromAdmin(EditCourseViewModel editCourse)
+        public async Task<ServiceException> EditCourseFromAdmin(EditCourseViewModel editCourse)
         {
             var newCourse = await GetAsync(c => c.Id == editCourse.CourseId);
+
+            if(newCourse == null)
+                return ServiceException.Create(
+                    type: "NotFound",
+                    title: "موجودیت یافت نشد",
+                    detail: "دوره ای با این شناسه یافت نشد.");
+
             newCourse.ImageName = editCourse.CourseImage;
             newCourse.CourseTitle = editCourse.CourseTitle;
             newCourse.Description = editCourse.Description;
@@ -133,13 +141,29 @@ namespace DomainServices.Services
 
             await UpdateAsync(newCourse);
             await _unitOfWork.CommitAsync();
+
+            return ServiceException.Create(
+                    type: "Success",
+                    title: "عملیات موفق",
+                    detail: "عملیات ویرایش دوره با موفقیت انجام شد.");
         }
 
-        public void DeleteCourse(int courseId)
+        public ServiceException DeleteCourse(int courseId)
         {
             var course = Get(c => c.Id == courseId);
+            if(course == null)
+                return ServiceException.Create(
+                    type: "NotFound",
+                    title: "عملیات ناموفق",
+                    detail: "دوره ای با این شناسه یافت نشد.");
+
             course.IsDelete = true;
             _unitOfWork.Commit();
+
+            return ServiceException.Create(
+                    type: "Success",
+                    title: "عملیات موفق",
+                    detail: "عملیات حذف دوره با موفقیت انجام شد.");
         }
     }
 }

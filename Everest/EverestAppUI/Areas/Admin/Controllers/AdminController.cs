@@ -1,5 +1,6 @@
 ﻿using DomainLayer.DTOs.User;
 using DomainLayer.MainInterfaces;
+using DomainServices.Exception;
 using DomainServices.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,12 +30,31 @@ namespace EverestAppUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetPagedList(int pageId = 1, string userNameFilter = "", string emailFilter = "")
         {
-            var userListModel = await _userService.GetUserList(pageId, userNameFilter, emailFilter);
-            return View(userListModel);
+            try
+            {
+                var userListModel = await _userService.GetUserList(pageId, userNameFilter, emailFilter);
+                return View(userListModel);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری لیست کاربران خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/Admin/Admin/Index/");
+            }
         }
 
         [Route("/Admin/CreateUser")]
-        public async Task<IActionResult> CreateUser()
+        public IActionResult CreateUser()
         {
             ViewData["Roles"] = _permissionService.GetAll();
             return View();
@@ -47,21 +67,24 @@ namespace EverestAppUI.Areas.Admin.Controllers
             if(!ModelState.IsValid)
                 return View(createUser);
             ViewData["Roles"] = SelectedRoles;
-            List<int> Ids = ViewData["Roles"] as List<int>;
             try
             {
-                var userId = _userService.CreateUserFromAdmin(createUser, SelectedRoles).Result;
-
+                var userId = await _userService.CreateUserFromAdmin(createUser, SelectedRoles);
                 _permissionRepository.AddRoleToUser(SelectedRoles, userId);
                 return Redirect("/Admin/Admin/GetPagedList");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام ایجاد کاربر خطایی روی داد. لطفا دوباره تلاش کنید.");
-                
-                if (ex.InnerException != null)
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام افزودن کاربر جدید خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return View(createUser);
@@ -69,20 +92,29 @@ namespace EverestAppUI.Areas.Admin.Controllers
             
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                _userService.DeleteUser(id);
+                var result = _userService.DeleteUser(id);
+
+                if (result.Type == "NotFound")
+                    ViewBag.NotFound = result.Detail;
+
                 return Redirect("/Admin/Admin/GetPagedList");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام حذف کاربر خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام حذف کاربر خطایی روی داد. لطفا دوباره تلاش کنید.");
 
-                if (ex.InnerException != null)
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return Redirect("/Admin/Admin/GetPagedList");
@@ -92,6 +124,17 @@ namespace EverestAppUI.Areas.Admin.Controllers
         [Route("/Admin/EditUser/{id?}")]
         public async Task<IActionResult> EditUser(int id)
         {
+            if (id == 0)
+            { 
+                var error = ServiceException.Create(
+                    type: "NotFound",
+                    title: "شناسه موجود نمیباشد.",
+                    detail: "شناسه مورد نظر برای ویرایش کاربر یافت نشد.");
+                ViewBag.error = error.Detail;
+
+                return Redirect("/Admin/Admin/GetPagedList");
+            }
+
             var userViewModel = await _userService.GetUserForShowEditMode(id);
             ViewData["Roles"] = _permissionService.GetRoles();
 
@@ -107,19 +150,28 @@ namespace EverestAppUI.Areas.Admin.Controllers
 
             try
             {
-                await _userService.EditUserFromAdmin(editUserViewModel);
+                var message = await _userService.EditUserFromAdmin(editUserViewModel);
+
+                if(message.Type == "NotFound")
+                    TempData["ServiceMessage"] = $"{message.Title} {System.Environment.NewLine} {message.Detail}";
+
                 _permissionRepository.EditUserRole(editUserViewModel.UserId, SelectedRoles);
 
                 await _unitOfWork.CommitAsync();
                 return Redirect("/Admin/Admin/GetPagedList");
             }
-            catch (Exception ex)
+            catch (ServiceException exception)
             {
-                ModelState.AddModelError("", "هنگام ویرایش کاربر خطایی روی داد. لطفا دوباره تلاش کنید.");
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام ویرایش کاربر خطایی روی داد. لطفا دوباره تلاش کنید.");
 
-                if (ex.InnerException != null)
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
                 {
-                    ModelState.AddModelError("", ex.InnerException.Message);
+                    ViewBag.error += "" + exception.InnerException.Message;
                 }
 
                 return Redirect("/Admin/Admin/GetPagedList");

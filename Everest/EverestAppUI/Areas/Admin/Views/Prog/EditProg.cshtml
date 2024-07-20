@@ -6,6 +6,14 @@
 
 <h1>ویرایش برنامه</h1>
 
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if(!string.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
@@ -59,7 +67,7 @@
 
                     <!-- انتخاب تصویر -->
                     <div class="form-group">
-                        <img id="ProgImagePreview" src="/ProgImage/@Model.ProgImage" alt="Course Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <img id="ProgImagePreview" src="/ProgImage/@Model.ProgImage" alt="Prog Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
                         <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
                     </div>
 

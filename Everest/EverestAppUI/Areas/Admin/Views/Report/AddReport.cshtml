@@ -1,0 +1,89 @@
+﻿@using DomainLayer.DTOs.Report
+@model AddReportViewModel
+@{
+    ViewData["Title"] = "گزارش جدید";
+}
+
+<h1>گزارش جدید</h1>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if(!string.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header BTN-PANEL text-white">اطلاعات دوره جدید</div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <!-- Id Field (Hidden) -->
+                    <input type="hidden" name="Id" value="1">
+
+                    <!-- عنوان برنامه -->
+                    <div class="form-group">
+                        <label asp-for="ReportTitle" for="Title">عنوان گزارش</label>
+                        <input asp-for="ReportTitle" type="text" class="form-control" id="ReportTitle" name="ReportTitle" value="عنوان گزارش" required="">
+                        <span asp-validation-for="ReportTitle" class="text-danger"></span>
+                    </div>
+
+                    <!-- توضیحات -->
+                    <div class="form-group">
+                        <label asp-for="ReportContent" for="ReportContent">محتوا</label>
+                        <textarea asp-for="ReportContent" class="form-control" id="ReportContent" name="ReportContent" rows="4" required="">محتوا</textarea>
+                        <span asp-validation-for="ReportContent" class="text-danger"></span>
+                    </div>
+
+                    <!-- محل برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="Place" for="Place">محل برگزاری</label>
+                        <input asp-for="Place" type="text" class="form-control" id="Place" name="Place" value="محل برگزاری" required="">
+                        <span asp-validation-for="Place" class="text-danger"></span>
+                    </div>
+
+                    <!-- انتخاب تصویر -->
+                    <div class="form-group">
+                        <img id="ProgImagePreview" src="/ReportImage/Default.jpg" alt="Course Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
+                        <span asp-validation-for="ImageName" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاریخ برگزاری -->
+                    <div class="form-group">
+                        <label asp-for="DateOfHolding" for="DateOfHolding">تاریخ برگزاری</label>
+                        <input asp-for="DateOfHolding" type="text" class="form-control" id="DateOfHolding" name="DateOfHolding" value="" required="">
+                        <span asp-validation-for="DateOfHolding" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#ProgImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageName").change(function() {
+            readURL(this);
+        });
+    </script>
+}

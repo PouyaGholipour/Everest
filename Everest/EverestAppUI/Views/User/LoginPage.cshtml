@@ -17,10 +17,10 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                        @if (ViewBag.IsActive == false)
+                        @if (@ViewData["message"] != null)
                         {
                             <div class="alert alert-warning">
-                                <p class="help-block">حساب کاربری شما فعال نمیباشد</p>
+                                <p>@ViewData["message"]</p>
                             </div>
                         }
 
@@ -32,7 +32,7 @@
 
                             <script>
                                 // Your delay in milliseconds
-                                var delay = 2000; 
+                                var delay = 3000; 
                                 setTimeout(function () { window.location = "https://localhost:7154"; }, delay);
                              </script>
                         }

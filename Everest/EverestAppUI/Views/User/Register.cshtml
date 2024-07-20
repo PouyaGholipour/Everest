@@ -27,29 +27,35 @@
                                     setTimeout(function () { window.location = "https://localhost:7154/Login"; }, delay);
                                 </script>
                             }
+
                         <h1 class="mb-3">ثبت‌نام در وب سایت باشگاه</h1>
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @if(@ViewData["message"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                @ViewData["message"]
+                            </div>
+                        }
+
                     </div>
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-md-6 col-lg-4">
                         <div class="login-wrap p-0">
                             <form asp-controller="User" asp-action="Register" class="signin-form">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
                                     <input asp-for="UserName" type="text" class="form-control mt-3" placeholder="نام کاربری" required>
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <input asp-for="Email" type="email" class="form-control text-start mt-2" placeholder="ایمیل" required>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <input asp-for="Password" id="register-password-field" type="password" class="form-control  mt-2" placeholder="رمز عبور" required>
-                                    <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <input asp-for="RePassword" id="register-password-repeat" type="password" class="form-control" placeholder="تکرار رمز عبور" required>
-                                    <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
                                 <p class="text-rule text-start">
                                     ثبت نام شما به منزله پذیرش قوانین و مقررات باشگاه کوهنوردی اورست می باشد.
