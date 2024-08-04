@@ -1,0 +1,30 @@
+﻿@using DomainLayer.DTOs.Course
+@model List<GetCourseForUserViewModel>
+@{
+    ViewData["Title"] = "لیست دوره ها";
+}
+
+<h1>لیست دوره های انتخاب شده</h1>
+
+<div style="margin-top:50px">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>عنوان دوره</th>
+                <th>توضیحات</th>
+                <th>تاریخ برگزاری</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var course in @Model)
+            {
+                <tr>
+                    <td>@course.CourseTitle</td>
+                    <td>@course.Description</td>
+                    <td>@course.HoldingDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

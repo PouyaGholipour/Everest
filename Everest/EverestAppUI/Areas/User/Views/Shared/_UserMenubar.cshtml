@@ -10,8 +10,8 @@
     <a href="#" class="nav-link" onclick="toggleSubMenu()">داشبورد<span class="fas fa-chevron-down ms-2"></span></a>
     <div class="sub-menu" id="sub-menu" style="display: block;">
         <a asp-area="User" asp-controller="Home" asp-action="EditUserInformation" class="nav-link ms-3">ویرایش اطلاعات</a>
-        <a href="#" class="nav-link ms-3">دوره‌های من</a>
-        <a href="#" class="nav-link ms-3">برنامه‌های من</a>
+        <a asp-area="User" asp-controller="Home" asp-action="GetUserCourses" class="nav-link ms-3">دوره‌های من</a>
+        <a asp-area="User" asp-controller="Home" asp-action="GetUserProgs" class="nav-link ms-3">برنامه‌های من</a>
         <a href="#" class="nav-link ms-3">سبد خرید</a>
     </div>
     <a href="#" class="nav-link">خروج</a>

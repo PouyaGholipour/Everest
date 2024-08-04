@@ -30,6 +30,7 @@ namespace InfrastructureLayer.ApplicationDbContext
             modelBuilder.ApplyConfiguration(new RoleConfig());
             modelBuilder.ApplyConfiguration(new RoleUserConfig());
             modelBuilder.ApplyConfiguration(new CourseUserConfig());
+            modelBuilder.ApplyConfiguration(new ProgUserConfig());
         }
 
         public DbSet<User> Users { get; set; }
@@ -41,5 +42,6 @@ namespace InfrastructureLayer.ApplicationDbContext
         public DbSet<Category> Categories { get; set; }
         public DbSet<RoleUser> RoleUsers { get; set; }
         public DbSet<CourseUser> CourseUsers { get; set; }
+        public DbSet<ProgUser> ProgUsers { get; set; }
     }
 }

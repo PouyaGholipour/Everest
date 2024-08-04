@@ -31,6 +31,7 @@ namespace InfrastructureLayer.Configs
                 .HasColumnType("varchar").HasMaxLength(150);
 
             builder.Property(x => x.UserName).HasColumnType("varchar")
+
                 .HasMaxLength(150).IsUnicode(true).IsRequired(true);
 
             builder.Property(x => x.Password).IsRequired(true);
@@ -46,10 +47,10 @@ namespace InfrastructureLayer.Configs
 
             builder.Property(x => x.UserType).HasDefaultValue(UserType.User);
 
-            builder.HasOne(x => x.Prog).WithMany(x => x.Users)
-                .HasForeignKey(x => x.ProgId).OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(x => x.Prog).WithMany(x => x.Users)
+            //    .HasForeignKey(x => x.ProgId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(x=>x.ProgId).IsRequired(false);
+            //builder.Property(x=>x.ProgId).IsRequired(false);
 
         }
     }

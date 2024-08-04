@@ -81,8 +81,53 @@ namespace EverestAppUI.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserCourses()
         {
+            try
+            {
+                var courseList = await _userService.GetUserCourses(User.Identity.Name);
+                return View(courseList);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری اطلاعات خطایی روی داد. لطفا دوباره تلاش کنید.");
 
-            return View();
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/User/Home/Index/");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserProgs()
+        {
+            try
+            {
+                var progList = await _userService.GetUserProgs(User.Identity.Name);
+                return View(progList);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری اطلاعات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/User/Home/Index/");
+            }
         }
     }
 }

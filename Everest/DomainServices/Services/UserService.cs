@@ -22,6 +22,8 @@ using TopLearn.Core.Convertors;
 using TopLearn.Core.Senders;
 using Microsoft.AspNetCore.Mvc;
 using DomainServices.Exception;
+using DomainLayer.DTOs.Course;
+using Microsoft.EntityFrameworkCore;
 
 namespace DomainServices.Services
 {
@@ -395,6 +397,30 @@ namespace DomainServices.Services
             return ServiceException.Create(type: "OK",
                     title: "اطلاعات با موفقیت ویرایش شد",
                     detail: "اطلاعات با موفقیت ویرایش شد");
+        }
+
+        public async Task<List<GetCourseForUserViewModel>> GetUserCourses(string userName)
+        {
+            return await _context.Users.Where(x => x.UserName == userName)
+                .SelectMany(x => x.CourseUsers).Include(x => x.Course)
+                .Select(x => new GetCourseForUserViewModel
+                {
+                    CourseTitle = x.Course.CourseTitle,
+                    Description = x.Course.Description,
+                    HoldingDate = x.Course.DateOfHolding
+                }).ToListAsync();
+        }
+
+        public async Task<List<GetProgForUserViewModel>> GetUserProgs(string userName)
+        {
+            return await _context.Users.Where(x => x.UserName == userName)
+                .SelectMany(x => x.ProgUsers).Include(x => x.Prog)
+                .Select(x => new GetProgForUserViewModel
+                {
+                    Title = x.Prog.Title,
+                    Description = x.Prog.Description,
+                    DateOfHolding = x.Prog.DateOfHolding
+                }).ToListAsync();
         }
     }
 }

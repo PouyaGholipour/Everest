@@ -1,4 +1,5 @@
-﻿using DomainLayer.DTOs.User;
+﻿using DomainLayer.DTOs.Course;
+using DomainLayer.DTOs.User;
 using DomainLayer.Entities;
 using DomainLayer.Enums;
 using DomainLayer.MainInterfaces;
@@ -31,6 +32,7 @@ namespace DomainServices.Interface
         Task<ServiceException> EditUserFromAdmin(EditUserViewModel editUser);
         Task<EditUserInformationViewModel> EditUserInformationGet(string userName);
         Task<ServiceException> EditUserInformationPost(EditUserInformationViewModel editUser, string name);
-        
+        Task<List<GetCourseForUserViewModel>> GetUserCourses(string userName);
+        Task<List<GetProgForUserViewModel>> GetUserProgs(string userName);
     }
 }

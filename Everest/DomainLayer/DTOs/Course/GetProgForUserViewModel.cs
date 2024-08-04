@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.DTOs.Course
 {
-    public class GetCourseForUserViewModel
+    public class GetProgForUserViewModel
     {
-        public int? CourseId { get; set; }
-        public string? CourseTitle { get; set; }
+        public int? Id { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
-        public DateTime? HoldingDate { get; set; }
+        public DateTime? DateOfHolding { get; set; }
     }
 }

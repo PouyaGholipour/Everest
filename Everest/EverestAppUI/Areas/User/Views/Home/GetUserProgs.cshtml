@@ -1,0 +1,29 @@
+﻿@using DomainLayer.DTOs.Course
+@model List<GetProgForUserViewModel>
+@{
+    ViewData["Title"] = "لیست برنامه ها";
+}
+
+<h1>لیست برنامه ها انتخاب شده</h1>
+
+<div style="margin-top:50px">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>عنوان برنامه</th>
+                <th>توضیحات</th>
+                <th>تاریخ برگزاری</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var prog in @Model)
+            {
+                <tr>
+                    <td>@prog.Title</td>
+                    <td>@prog.Description</td>
+                    <td>@prog.DateOfHolding</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

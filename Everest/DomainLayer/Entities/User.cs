@@ -34,10 +34,11 @@ namespace DomainLayer.Entities
 
         #region Relations for navigation property
 
-        [ForeignKey(nameof(ProgId))]
-        public Prog? Prog { get; set; }
-        public int? ProgId { get; set; }
+        //[ForeignKey(nameof(ProgId))]
+        //public Prog? Prog { get; set; }
+        //public int? ProgId { get; set; }
         public ICollection<CourseUser> CourseUsers { get; set; }
+        public ICollection<ProgUser> ProgUsers { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<RoleUser> RoleUsers { get; set; }
         #endregion
@@ -55,6 +56,23 @@ namespace DomainLayer.Entities
         #region Relations for navigation property
 
         public Course Course { get; set; }
+        public User User { get; set; }
+
+        #endregion
+    }
+
+    public class ProgUser
+    {
+        public ProgUser()
+        {
+
+        }
+        public int ProgId { get; set; }
+        public int UserId { get; set; }
+
+        #region Relations for navigation property
+
+        public Prog Prog { get; set; }
         public User User { get; set; }
 
         #endregion

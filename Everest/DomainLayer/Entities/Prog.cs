@@ -33,7 +33,7 @@ namespace DomainLayer.Entities
 
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<ProgUser>? ProgUsers { get; set; }
 
         #endregion
     }
