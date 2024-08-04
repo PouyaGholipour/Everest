@@ -75,6 +75,11 @@ namespace InfrastructureLayer.MainServices
             return await dbSet.ToListAsync();
         }
 
+        public async Task<IQueryable<TEntity>> GetAllAsyncQuery()
+        {
+            return dbSet.AsQueryable();
+        }
+
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> where)
         {
             return await dbSet.Where(where).FirstOrDefaultAsync();
@@ -119,6 +124,7 @@ namespace InfrastructureLayer.MainServices
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

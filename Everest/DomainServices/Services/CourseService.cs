@@ -165,5 +165,21 @@ namespace DomainServices.Services
                     title: "عملیات موفق",
                     detail: "عملیات حذف دوره با موفقیت انجام شد.");
         }
+
+        public async Task<List<HeldCourseListViewModel>> GetHeldCourseList()
+        {
+            IQueryable<Course> courses = await GetAllAsyncQuery();
+
+             var courseList = courses.OrderByDescending(c => c.DateOfHolding)
+                .Take(6).Select(c => new HeldCourseListViewModel
+                {
+                    Title = c.CourseTitle,
+                    DateOfHolding = c.DateOfHolding,
+                    Image = c.ImageName,
+                    Place = c.Place
+                }).ToList();
+
+            return courseList;
+        }
     }
 }
