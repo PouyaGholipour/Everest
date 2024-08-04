@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @Html.Partial("_Meta")
+</head>
+<body>
+
+    <header>
+            @Html.Partial("_UserMenubar")
+    </header>
+    <div class="container-fluid">
+        <div class="row" style="margin-right: 250px">
+            @Html.Partial("_UserNavbar")
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+
+            @Html.Partial("_UserFooter")
+        </div>
+    </div>
+
+    @Html.Partial("_Script")
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

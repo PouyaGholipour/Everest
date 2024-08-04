@@ -49,7 +49,7 @@ namespace DomainServices.Services
         {
             Course course = new Course();
             course.CourseTitle = addCourse.CourseTitle;
-            course.CoachName = addCourse.CoachName;
+            course.CoachName = addCourse.CoachName; 
             course.Description = addCourse.Description;
             course.Place = addCourse.Place;
             course.Pirce = Convert.ToDecimal(addCourse.Pirce);

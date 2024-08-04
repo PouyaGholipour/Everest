@@ -66,4 +66,17 @@ namespace DomainLayer.DTOs.User
 
         public IFormFile ImageName { get; set; }
     }
+
+    public class EditUserInformationViewModel
+    {
+        public string UserName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public DateTime? BirthdayDate { get; set; }
+        public IFormFile? ImageName { get; set; }
+        public string? UserImage { get; set; }
+        public string? NationalCode { get; set; }
+    }
 }

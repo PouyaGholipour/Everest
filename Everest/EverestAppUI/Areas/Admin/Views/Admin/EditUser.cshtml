@@ -2,11 +2,11 @@
 @using DomainLayer.Entities
 @model EditUserViewModel
 @{
-    ViewData["Title"] = "ویرایش کاربر جدید";
+    ViewData["Title"] = "ویرایش کاربر";
     List<Role> roles = ViewData["Roles"] as List<Role>;
 }
 
-<h1>افزودن کاربر جدید</h1>
+<h1>ویرایش کاربر</h1>
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 @if(!string.IsNullOrEmpty(ViewBag.error))

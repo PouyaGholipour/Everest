@@ -29,5 +29,8 @@ namespace DomainServices.Interface
         Task<UserListViewModel> GetUserList(int pageId = 1, string userNameFilter = "", string emailFilter = "");
         Task<int> CreateUserFromAdmin(CreateUserViewModel createUser, List<int> SelectedRole);
         Task<ServiceException> EditUserFromAdmin(EditUserViewModel editUser);
+        Task<EditUserInformationViewModel> EditUserInformationGet(string userName);
+        Task<ServiceException> EditUserInformationPost(EditUserInformationViewModel editUser, string name);
+        
     }
 }

@@ -229,7 +229,7 @@ namespace DomainServices.Services
                 return ServiceException.Create(
                     type: "NotFound",
                     title: "موجودیت یافت نشد",
-                    detail: "کاربری با این شناسه کاربری یافت نشد.");
+                    detail: "کاربری با این شناسه یافت نشد.");
 
             user.IsDelete = true;
             Update(user);
@@ -295,7 +295,7 @@ namespace DomainServices.Services
             if (user == null)
                 return ServiceException.Create(type:"NotFound",
                     title:"کاربر یافت نشد",
-                    detail:"موجودیتی با این شناسه کاربری یافت نشد");
+                    detail:"کاربری بااین شناسه یافت نشد");
 
             user.Email = editUser.Email;
             
@@ -327,8 +327,74 @@ namespace DomainServices.Services
 
             await UpdateAsync(user);
             return ServiceException.Create(type: "Found",
-                    title: "کاربر با موفقیت یافت شد",
-                    detail: "موجودیتی با این شناسه کاربری یافت شد");
+                    title: "کاربر با موفقیت ویرایش شد",
+                    detail: "اطلاعات کاربر با موفقیت ویرایش شد");
+        }
+
+        public async Task<EditUserInformationViewModel> EditUserInformationGet(string userName)
+        {
+            var user = await GetAsync(u => u.UserName == userName);
+
+            EditUserInformationViewModel editUser = new EditUserInformationViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                NationalCode = user.NationalCode,
+                BirthdayDate = user.BirthDayDate,
+                UserImage = user.ImageName
+            };
+
+            return editUser;
+        }
+
+        public async Task<ServiceException> EditUserInformationPost(EditUserInformationViewModel editUser, string name)
+        {
+            var user = await GetAsync(x => x.UserName == name);
+            
+            if(user == null)
+                return ServiceException.Create(type: "NotFound",
+                    title: "کاربر یافت نشد",
+                    detail: "کاربری با این شناسه یافت نشد");
+
+            user.RegisterDate = DateTime.Now;
+            user.Email = editUser.Email;
+            user.FirstName = editUser.FirstName;
+            user.LastName = editUser.LastName;
+            user.PhoneNumber = editUser.PhoneNumber;
+            user.NationalCode = editUser.NationalCode;
+            user.BirthDayDate = editUser.BirthdayDate;
+
+            #region User Avatar
+
+            if (editUser.ImageName != null)
+            {
+                // delete old image
+                if (editUser.UserImage != "Default.jpg")
+                {
+                    string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", editUser.UserImage);
+                    if (File.Exists(deletePath))
+                        File.Delete(deletePath);
+                }
+
+                // Save new image
+                user.ImageName = NameGenerator.GenerateUniqCode() + Path.GetExtension(editUser.ImageName.FileName);
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", user.ImageName);
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    editUser.ImageName.CopyTo(stream);
+                }
+                user.ImagePath = imagePath;
+            }
+
+            #endregion
+
+            await UpdateAsync(user);
+            return ServiceException.Create(type: "OK",
+                    title: "اطلاعات با موفقیت ویرایش شد",
+                    detail: "اطلاعات با موفقیت ویرایش شد");
         }
     }
 }

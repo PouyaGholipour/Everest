@@ -5,6 +5,7 @@ using DomainServices.Exception;
 using DomainServices.Interface;
 using InfrastructureLayer.ApplicationDbContext;
 using InfrastructureLayer.MainServices;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,6 +99,7 @@ namespace DomainServices.Services
                     title: "موجودیت یافت نشد.",
                     detail: "گزارشی با این شناسه موجودیت یافت نشد.");
 
+            report = editReport.Adapt<Report>();
             report.ReportTitle = editReport.ReportTitle;
             report.ReportContent = editReport.ReportContent;
             report.Place = editReport.Place;
