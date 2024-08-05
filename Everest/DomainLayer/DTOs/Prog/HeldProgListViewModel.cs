@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.DTOs.Course
+namespace DomainLayer.DTOs.Prog
 {
-    public class HeldCourseListViewModel
+    public class HeldProgListViewModel
     {
         public int? Id { get; set; }
         public string? Title { get; set; }

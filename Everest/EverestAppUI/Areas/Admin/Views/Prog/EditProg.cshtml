@@ -82,11 +82,11 @@
                         <label asp-for="Status" for="Status">وضعیت</label>
                         <div>
                             <input type="radio" asp-for="Status" name="Status" Value="true" class="@((Model.Status == true) ? "active" : "")"/>
-                            <label asp-for="Status" for="Status" >فعال</label>
+                            <label asp-for="Status" for="Status" >جاری</label>
                         </div>
                         <div>
                             <input type="radio" asp-for="Status" name="Status" Value="false" class="@((Model.Status == true) ? "active" : "")"/>
-                            <label asp-for="Status" for="Status" >غیر فعال</label>
+                            <label asp-for="Status" for="Status" >برگذار شده</label>
                         </div>
                     </div>
 

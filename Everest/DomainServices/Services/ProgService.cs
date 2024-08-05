@@ -167,5 +167,22 @@ namespace DomainServices.Services
                     title: "عملیات موفق.",
                     detail: "عملیات حذف برنامه با موفقیت انجام شد.");
         }
+
+        public async Task<List<HeldProgListViewModel>> GetHeldProgList()
+        {
+            IQueryable<Prog> courses = await GetAllAsyncQuery();
+
+            var courseList = courses.OrderByDescending(c => c.DateOfHolding)
+               .Take(6).Select(c => new HeldProgListViewModel
+               {
+                   Title = c.Title,
+                   DateOfHolding = c.DateOfHolding,
+                   Image = c.ImageName,
+                   Place = c.Place,
+                   Status = c.Status,
+               }).ToList();
+
+            return courseList;
+        }
     }
 }

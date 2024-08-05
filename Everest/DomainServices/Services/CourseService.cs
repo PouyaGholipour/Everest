@@ -136,6 +136,10 @@ namespace DomainServices.Services
                 }
                 newCourse.ImagePath = imagePath;
             }
+            else
+            {
+                newCourse.ImageName = "Default.jpg";
+            }
 
             #endregion
 
@@ -173,13 +177,51 @@ namespace DomainServices.Services
              var courseList = courses.OrderByDescending(c => c.DateOfHolding)
                 .Take(6).Select(c => new HeldCourseListViewModel
                 {
+                    Id = c.Id,
                     Title = c.CourseTitle,
                     DateOfHolding = c.DateOfHolding,
                     Image = c.ImageName,
-                    Place = c.Place
+                    Place = c.Place,
+                    Status = c.Status,
                 }).ToList();
 
             return courseList;
+        }
+
+        public async Task<CourseDetailViewModel> GetCourseDetails(int id)
+        {
+            var course = await GetAsync(c => c.Id==id);
+            CourseDetailViewModel courseDetail = new CourseDetailViewModel()
+            {
+                Title = course.CourseTitle,
+                Description = course.Description,
+                Place = course.Place,
+                CoathName = course.CoachName,
+                Price = course.Pirce,
+                HoldingDate = course.DateOfHolding.ToString("yyyy-MM-dd"),
+                Image = course.ImageName,
+                WhichCoursePrerequisites = course.WhichCoursePrerequisites,
+                PrerequisiteCourse = course.PrerequisiteCourse,
+            };
+            switch (course.CourseType)
+            {
+                case DomainLayer.Enums.CourseType.Mountaineering:
+                    courseDetail.CourseType = "کوهپیمایی";
+                    break;
+                case DomainLayer.Enums.CourseType.RockClimbing:
+                    courseDetail.CourseType = "صخره نوردی";
+                    break;
+                case DomainLayer.Enums.CourseType.IceClimbing:
+                    courseDetail.CourseType = "یخ نوردی";
+                    break;
+                case DomainLayer.Enums.CourseType.Rescue:
+                    courseDetail.CourseType = "امداد و نجات";
+                    break;
+                default:
+                    break;
+            }
+
+            return courseDetail;
         }
     }
 }

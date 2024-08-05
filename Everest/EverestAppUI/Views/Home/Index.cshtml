@@ -13,7 +13,11 @@
         <!-- End Header -->
 
         <!-- Start courses -->
-        @Html.Partial("_Course")
+        @await Component.InvokeAsync("CourseListComponent")
+        <!-- End courses -->
+
+        <!-- Start courses -->
+        @await Component.InvokeAsync("ProgListComponent")
         <!-- End courses -->
 
         <!-- Start Journal -->

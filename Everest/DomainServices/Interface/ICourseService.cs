@@ -21,5 +21,6 @@ namespace DomainServices.Interface
         Task<EditCourseViewModel> GetCourseForShowEditMode(int courseId);
         Task<ServiceException> EditCourseFromAdmin(EditCourseViewModel editCourse);
         ServiceException DeleteCourse(int courseId);
+        Task<CourseDetailViewModel> GetCourseDetails(int id); 
     }
 }

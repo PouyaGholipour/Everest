@@ -1,0 +1,32 @@
+﻿@using DomainLayer.DTOs.Course
+@model CourseDetailViewModel
+@{
+    ViewData["Title"] = "اطلاعات دوره";
+}
+
+<h1>اطلاعات دوره</h1>
+
+<div class="row">
+    <input type="hidden" asp-for="Id"/>
+    <!-- تصویر برنامه -->
+    <div class="col-lg-6">
+        <div class="course-image">
+            <img src="/CourseImage/@Model.Image" alt="Course Image" class="img-fluid rounded">
+        </div>
+    </div>
+    <!-- جزئیات برنامه -->
+    <div class="col-lg-6">
+        <div class="course-details">
+            <h2 class="text-primary">عنوان برنامه: @Model.Title</h2>
+            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>مکان: @Model.Place</p>
+            <p class="lead">توضیحات: @Model.Description</p>
+            <p><strong>مربی:</strong> <span>@Model.CoathName</span></p>
+            <p><strong>پیش‌نیازها:</strong> <span>@Model.WhichCoursePrerequisites</span></p>
+            <p><strong>پیش‌نیاز دوره:</strong> <span>@Model.PrerequisiteCourse</span></p>
+            <p><strong>قیمت:</strong> <span class="text-success">@Model.Price.ToString() تومان</span></p>
+            <p><strong>تاریخ برگزاری:</strong> <span>@Model.HoldingDate</span></p>
+            <p><strong>نوع دوره:</strong> <span>@Model.CourseType</span></p>
+            <a class="btn btn-primary">افزودن به دوره های من</a>
+        </div>
+    </div>
+</div>
