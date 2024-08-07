@@ -405,9 +405,10 @@ namespace DomainServices.Services
                 .SelectMany(x => x.CourseUsers).Include(x => x.Course)
                 .Select(x => new GetCourseForUserViewModel
                 {
+                    CourseId = x.CourseId,
                     CourseTitle = x.Course.CourseTitle,
                     Description = x.Course.Description,
-                    HoldingDate = x.Course.DateOfHolding
+                    HoldingDate = x.Course.DateOfHolding.ToString("yyyy-MM-dd")
                 }).ToListAsync();
         }
 

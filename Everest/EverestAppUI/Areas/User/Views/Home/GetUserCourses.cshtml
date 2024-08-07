@@ -13,6 +13,7 @@
                 <th>عنوان دوره</th>
                 <th>توضیحات</th>
                 <th>تاریخ برگزاری</th>
+                <th>عملیات</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                     <td>@course.CourseTitle</td>
                     <td>@course.Description</td>
                     <td>@course.HoldingDate</td>
+                    <td><a class="btn btn-primary" asp-action="RemoveCourseUser" asp-route-CourseId ="@course.CourseId">حذف</a> | ثبت نهایی</td>
                 </tr>
             }
         </tbody>

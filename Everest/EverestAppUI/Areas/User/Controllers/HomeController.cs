@@ -11,9 +11,12 @@ namespace EverestAppUI.Areas.User.Controllers
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-        public HomeController(IUserService userService)
+        private readonly ICourseUserService _courseUserService;
+        public HomeController(IUserService userService,
+                              ICourseUserService courseUserService)
         {
             _userService = userService;
+            _courseUserService = courseUserService;
         }
         public IActionResult Index()
         {
@@ -127,6 +130,40 @@ namespace EverestAppUI.Areas.User.Controllers
                 }
 
                 return Redirect("/User/Home/Index/");
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveCourseUser(int CourseId)
+        {
+            try
+            {
+                var user = await _userService.GetAsync(x => x.UserName == User.Identity.Name);
+                var result = await _courseUserService.RemoveCourseUser(user.Id, CourseId);
+
+                if (result.Type == "NotFound")
+                    ViewBag.error = $"{result.Detail}";
+                else if (result.Type == "Success")
+                    ViewBag.Message = $"{result.Detail}";
+
+                return View();
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
             }
         }
     }

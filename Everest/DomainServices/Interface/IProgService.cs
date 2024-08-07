@@ -14,7 +14,8 @@ namespace DomainServices.Interface
     {
         // Definition private function model
         ProgListViewModel GetPagedList(int pageId, string progTitleFilter);
-        Task<List<HeldProgListViewModel>> GetHeldProgList();
+        Task<List<HeldProgListViewModel>> GetHeldProgList(int take);
+        Task<ProgDetailViewModel> GetProgDetail(int id);
         Task AddProg(AddProgViewModel addProg);
         Task<EditProgViewModel> GetProgForShowEditMode(int progId);
         Task<ServiceException> EditProg(EditProgViewModel editProg);

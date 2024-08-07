@@ -18,7 +18,7 @@ namespace EverestAppUI.ViewComponents
         {
             try
             {
-                var courseList = await _courseService.GetHeldCourseList();
+                var courseList = await _courseService.GetHeldCourseList(6);
                 return View("CourseList", courseList);
             }
             catch (Exception ex)

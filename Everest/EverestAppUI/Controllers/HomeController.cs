@@ -1,4 +1,5 @@
-﻿using DomainServices.Exception;
+﻿using DomainLayer.DTOs.CourseUser;
+using DomainServices.Exception;
 using DomainServices.Interface;
 using EverestAppUI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,19 @@ namespace EverestAppUI.Controllers
         private readonly ICourseService _courseService;
         private readonly IUserService _userService;
         private readonly IProgService _progService;
+        private readonly ICourseUserService _courseUserService;
 
         public HomeController(ILogger<HomeController> logger,
                               IProgService progService,
                               ICourseService courseService,
-                              IUserService userService)
+                              IUserService userService,
+                              ICourseUserService courseUserService)
         {
             _logger = logger;
             _userService = userService;
             _courseService = courseService;
             _progService = progService;
+            _courseUserService = courseUserService;
         }
 
         public IActionResult Index()
@@ -39,6 +43,8 @@ namespace EverestAppUI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        #region Course
 
         [HttpGet]
         [Route("/Home/CourseDetail/{id?}")]
@@ -74,8 +80,145 @@ namespace EverestAppUI.Controllers
                     ViewBag.error += "" + exception.InnerException.Message;
                 }
 
-                return Redirect("/Admin/Admin/GetPagedList");
+                return Redirect("/");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowMoreCourse()
+        {
+            try
+            {
+                var courseList = await _courseService.GetHeldCourseList(20);
+                return View(courseList);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری لیست دوره ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+
+        #endregion
+        #region Prog
+
+        [HttpGet]
+        [Route("/Home/ProgDetail/{id?}")]
+        public async Task<IActionResult> ProgDetail(int id)
+        {
+            if (id == 0)
+            {
+                var error = ServiceException.Create(
+                    type: "NotFound",
+                    title: "شناسه موجود نمیباشد.",
+                    detail: "شناسه مورد نظر برای بارگذاری اطلاعات برنامه یافت نشد.");
+                ViewBag.error = error.Detail;
+
+                return Redirect("/");
+            }
+            try
+            {
+                var progDetails = await _progService.GetProgDetail(id);
+                return View(progDetails);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری اطلاعات برنامه خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowMoreProgs()
+        {
+            try
+            {
+                var progList = await _progService.GetHeldProgList(20);
+                return View(progList);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام بارگذاری لیست برنامه ها خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+        #endregion
+
+        #region CourseUser
+
+        [HttpGet]
+        public async Task<IActionResult> AddCourseToUser(int CourseId)
+        {
+            try
+            {
+                var user = await _userService.GetAsync(x => x.UserName == User.Identity.Name);
+                var result = await _courseUserService.AddCourseToUser(user.Id, CourseId);
+
+                if (result.Type == "NotFound")
+                    ViewBag.error = $"{result.Detail}";
+                else if (result.Type == "Success")
+                    ViewBag.Message = $"{result.Detail}";
+
+                return View();
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+
+
+        #endregion
+
+        #region ProgUser
+
+
+
+        #endregion
     }
 }

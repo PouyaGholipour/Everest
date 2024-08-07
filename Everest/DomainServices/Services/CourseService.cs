@@ -170,12 +170,12 @@ namespace DomainServices.Services
                     detail: "عملیات حذف دوره با موفقیت انجام شد.");
         }
 
-        public async Task<List<HeldCourseListViewModel>> GetHeldCourseList()
+        public async Task<List<HeldCourseListViewModel>> GetHeldCourseList(int take)
         {
             IQueryable<Course> courses = await GetAllAsyncQuery();
 
              var courseList = courses.OrderByDescending(c => c.DateOfHolding)
-                .Take(6).Select(c => new HeldCourseListViewModel
+                .Take(take).Select(c => new HeldCourseListViewModel
                 {
                     Id = c.Id,
                     Title = c.CourseTitle,
@@ -193,12 +193,13 @@ namespace DomainServices.Services
             var course = await GetAsync(c => c.Id==id);
             CourseDetailViewModel courseDetail = new CourseDetailViewModel()
             {
+                Id = course.Id,
                 Title = course.CourseTitle,
                 Description = course.Description,
                 Place = course.Place,
                 CoathName = course.CoachName,
                 Price = course.Pirce,
-                HoldingDate = course.DateOfHolding.ToString("yyyy-MM-dd"),
+                HoldingDate = course.DateOfHolding.ToString("dd-MM-yyyy"),
                 Image = course.ImageName,
                 WhichCoursePrerequisites = course.WhichCoursePrerequisites,
                 PrerequisiteCourse = course.PrerequisiteCourse,
@@ -218,6 +219,7 @@ namespace DomainServices.Services
                     courseDetail.CourseType = "امداد و نجات";
                     break;
                 default:
+                    courseDetail.CourseType = "کوهپیمایی";
                     break;
             }
 

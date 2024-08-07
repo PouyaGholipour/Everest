@@ -11,6 +11,6 @@ namespace DomainLayer.DTOs.Course
         public int? CourseId { get; set; }
         public string? CourseTitle { get; set; }
         public string? Description { get; set; }
-        public DateTime? HoldingDate { get; set; }
+        public string? HoldingDate { get; set; }
     }
 }

@@ -168,13 +168,14 @@ namespace DomainServices.Services
                     detail: "عملیات حذف برنامه با موفقیت انجام شد.");
         }
 
-        public async Task<List<HeldProgListViewModel>> GetHeldProgList()
+        public async Task<List<HeldProgListViewModel>> GetHeldProgList(int take)
         {
             IQueryable<Prog> courses = await GetAllAsyncQuery();
 
             var courseList = courses.OrderByDescending(c => c.DateOfHolding)
-               .Take(6).Select(c => new HeldProgListViewModel
+               .Take(take).Select(c => new HeldProgListViewModel
                {
+                   Id = c.Id,
                    Title = c.Title,
                    DateOfHolding = c.DateOfHolding,
                    Image = c.ImageName,
@@ -183,6 +184,44 @@ namespace DomainServices.Services
                }).ToList();
 
             return courseList;
+        }
+
+        public async Task<ProgDetailViewModel> GetProgDetail(int id)
+        {
+            var prog = await GetByIdAsync(id);
+
+            ProgDetailViewModel progDetail = new ProgDetailViewModel()
+            {
+                Id = prog.Id,
+                Title=prog.Title,
+                Description = prog.Description,
+                HoldingDate = prog.DateOfHolding.ToString("yyyy-MM-dd"),
+                Price = prog.Price,
+                WhichProgramPrerequisites = prog.WhichProgramPrerequisites,
+                PrerequisiteCourse = prog.PrerequisiteCourse,
+                PrerequisitePrograms = prog.PrerequisitePrograms,
+                Place = prog.Place,
+                LeaderName = prog.LeaderName,
+                Image = prog.ImageName
+            };
+
+            switch (prog.ProgramType)
+            {
+                case DomainLayer.Enums.ProgramType.Easy:
+                    progDetail.ProgramType = "آسان";
+                    break;
+                case DomainLayer.Enums.ProgramType.Medium:
+                    progDetail.ProgramType = "متوسط";
+                    break;
+                case DomainLayer.Enums.ProgramType.Hard:
+                    progDetail.ProgramType = "سخت";
+                    break;
+                default:
+                    progDetail.ProgramType = "آسان";
+                    break;
+            }
+
+            return progDetail;
         }
     }
 }

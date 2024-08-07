@@ -47,6 +47,7 @@ builder.Services.AddScoped<IUserRepositoy, UserRepository>();
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ICourseUserService, CourseUserService>();
 builder.Services.AddScoped<IProgService, ProgService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();

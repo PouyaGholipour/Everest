@@ -3,18 +3,18 @@
     <img class="img-fluid" src="./img/Logo.jpg" alt="آیکون" style="width: 80px; height: 50px;">
     <ul class="nav-links">
         <li><a asp-controller="Home" asp-action="Index" class="active">صفحه اصلی</a></li>
-        <li><a href="#">برنامه ها</a></li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle">برگزارشده ها <i class="bi"></i></a>
+            <a href="#" class="dropdown-toggle">دسته بندی <i class="bi"></i></a>
             <ul class="dropdown-menu">
-                <li><a href="#">برنامه‌های اجرا شده</a></li>
-                <li><a href="#">دوره‌های برگزار شده</a></li>
+                <li><a asp-action="ShowMoreProgs">برنامه‌ها</a></li>
+                <li><a asp-action="ShowMoreCourse">دوره‌ها</a></li>
             </ul>
         </li>
-        <li><a href="#">دوره‌ها</a></li>
+        <li><a href="#">گزارش ها</a></li>
         <li><a href="#">مجله باشگاه</a></li>
         <li><a href="#">تماس با ما</a></li>
         <li><a href="#">درباره باشگاه</a></li>
+        <li><a asp-area="User" asp-controller="Home" asp-action="Index" class="active">پنل کاربری</a></li>
         <i id="reservationIcon" class="bi bi-wallet-fill mx-3 fa-2x"></i>
 
         @if (User.Identity.IsAuthenticated)

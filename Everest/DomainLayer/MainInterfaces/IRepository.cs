@@ -17,9 +17,11 @@ namespace DomainLayer.MainInterfaces
         void Update(TEntity entity);
         void DeleteById(int id);
         void Delete(TEntity entity);
+        void RemoveRange(List<TEntity> entities);
 
         Task<List<TEntity>> GetAllAsync();
         Task<IQueryable<TEntity>> GetAllAsyncQuery();
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> where);
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> where);
         Task<TEntity> GetByIdAsync(int id);
         Task CreateAsync(TEntity entity);

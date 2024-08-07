@@ -16,7 +16,7 @@ namespace DomainServices.Interface
         // Definition private function model
 
         Task<CourseListViewModel> GetCourseList(int pageId = 1, string courseTitleFilter = "");
-        Task<List<HeldCourseListViewModel>> GetHeldCourseList();
+        Task<List<HeldCourseListViewModel>> GetHeldCourseList(int take);
         Task AddCourse(AddCourseViewModel addCourse);
         Task<EditCourseViewModel> GetCourseForShowEditMode(int courseId);
         Task<ServiceException> EditCourseFromAdmin(EditCourseViewModel editCourse);

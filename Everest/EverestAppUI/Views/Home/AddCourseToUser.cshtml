@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "افزودن دوره";
+}
+
+<h1>افزودن دوره</h1>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+        <div class="alert alert-success">
+        @ViewBag.Message
+        </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.error))
+{
+        <div class="alert alert-danger">
+        @ViewBag.error
+        </div>
+}
+
+<script>
+    // Your delay in milliseconds
+    var delay = 3000;
+    setTimeout(function () { window.location = "https://localhost:7154/"; }, delay);
+</script>

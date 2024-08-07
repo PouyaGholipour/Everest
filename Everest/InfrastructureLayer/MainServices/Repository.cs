@@ -67,7 +67,14 @@ namespace InfrastructureLayer.MainServices
         {
             if (entity == null)
                 throw new ArgumentNullException("موجودیت مورد نظر یافت نشد");
+            dbSet.Remove(entity);
+            _unitOfWork.Commit();
+        }
 
+        public void RemoveRange(List<TEntity> entities)
+        {
+            dbSet.RemoveRange(entities);
+            _unitOfWork.Commit();
         }
 
         public async Task<List<TEntity>> GetAllAsync()
@@ -83,6 +90,11 @@ namespace InfrastructureLayer.MainServices
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> where)
         {
             return await dbSet.Where(where).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> where)
+        {
+            return await dbSet.Where(where).ToListAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(int id)

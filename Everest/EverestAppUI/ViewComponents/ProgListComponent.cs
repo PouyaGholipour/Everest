@@ -18,7 +18,7 @@ namespace EverestAppUI.ViewComponents
         {
             try
             {
-                var progList = await _progService.GetHeldProgList();
+                var progList = await _progService.GetHeldProgList(6);
                 return View("ProgList", progList);
             }
             catch (Exception ex)
