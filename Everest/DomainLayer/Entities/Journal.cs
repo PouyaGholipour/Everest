@@ -14,5 +14,6 @@ namespace DomainLayer.Entities
         public string? ImageName { get; set; }
         public string? ImagePath { get; set; }
         public bool IsDelete { get; set; } = false;
+        public DateTime CreateDate { get; set; }
     }
 }

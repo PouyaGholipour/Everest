@@ -1,0 +1,44 @@
+﻿@using DomainLayer.DTOs.Journal
+@model List<GetJournalListViewModel>
+@{
+    ViewData["Title"] = "لیست مجله ها";
+}
+
+<h1>لیست مجله ها</h1>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="text-end mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                    <h1 class="mb-1" style="margin-left: 10rem;">مجله ها</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active"> 
+                <div class="row g-4">
+                    @foreach (var journal in Model)
+                    {
+                        <input type="hidden" asp-for="@journal.Id" />
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="property-item rounded overflow-hidden">
+                                <div class="position-relative overflow-hidden">
+                                    <a href="">
+                                        <img class="img-fluid img-fluid-course" src="/JournalImage/@journal.JournalImage" alt="تصویر مجله">
+                                    </a>
+                                </div>
+                                <div class="p-4 pb-0">
+                                    <a class="d-block h5 mb-2" href="">@journal.JournalTitle</a>
+                                </div>
+                                <div class="d-flex border-top">
+                                    <a asp-action="JournalDetail" asp-route-JournalId="@journal.Id" class="btn btn-primary">جزئیات</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

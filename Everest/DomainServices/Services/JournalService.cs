@@ -49,6 +49,7 @@ namespace DomainServices.Services
             Journal journal = new Journal();
             journal.JournalTitle = addJournal.JournalTitle;
             journal.Content = addJournal.Content;
+            journal.CreateDate = DateTime.Now;
 
             #region Save Avatar
 
@@ -139,6 +140,36 @@ namespace DomainServices.Services
                     type: "Success",
                     title: "عملیات موفق",
                     detail: "عملیات حذف مجله با موفقیت انجام شد.");
+        }
+
+        public async Task<List<GetJournalListViewModel>> GetJournaList(int take)
+        {
+            IQueryable<Journal> journals = await GetAllAsyncQuery();
+
+            var journalsList = journals.OrderByDescending(c => c.CreateDate)
+               .Take(take).Select(c => new GetJournalListViewModel
+               {
+                   Id = c.Id,
+                   JournalTitle = c.JournalTitle,
+                   Content = c.Content,
+                   JournalImage = c.ImageName
+
+               }).ToList();
+
+            return journalsList;
+        }
+
+        public async Task<GetJournalListViewModel> GetJournalDetail(int journalId)
+        {
+            var journal = await GetByIdAsync(journalId);
+            GetJournalListViewModel journalDetail = new GetJournalListViewModel()
+            {
+                Id = journalId,
+                JournalTitle = journal.JournalTitle,
+                JournalImage = journal.ImageName,
+                Content = journal.Content,
+            };
+            return journalDetail;
         }
     }
 }

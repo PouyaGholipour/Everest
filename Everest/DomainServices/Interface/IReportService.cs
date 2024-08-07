@@ -18,5 +18,7 @@ namespace DomainServices.Interface
         Task<EditReportViewModel> GetReportForShowEditMode(int id);
         Task<ServiceException> EditReport (EditReportViewModel editReport);
         ServiceException RemoveReport(int id);
+        Task<List<GetReportListViewModel>> GetReportList(int take);
+        Task<GetReportListViewModel> GetReportlDetail(int reportId);
     }
 }

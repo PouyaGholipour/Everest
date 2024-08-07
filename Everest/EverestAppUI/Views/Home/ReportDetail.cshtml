@@ -1,0 +1,25 @@
+﻿@using DomainLayer.DTOs.Report
+@model GetReportListViewModel
+@{
+    ViewData["Title"] = "لیست گزارش ها";
+}
+
+<h1>لیست گزارش ها</h1>
+
+<div class="row">
+    <!-- تصویر گزارش -->
+    <div class="col-lg-6">
+        <div class="course-image">
+            <img src="/ReportImage/@Model.Image" alt="تصویر گزارش" class="img-fluid rounded">
+        </div>
+    </div>
+    <!-- جزئیات گزارش -->
+    <div class="col-lg-6">
+        <div class="course-details">
+            <h2 class="text-primary">عنوان گزارش: @Model.Title</h2>
+            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>مکان: @Model.Place</p>
+            <p class="lead">توضیحات: @Model.ReportContent</p>
+            <p><strong>تاریخ برگزاری:</strong> <span>@Model.DateOfHolding</span></p>
+        </div>
+    </div>
+</div>

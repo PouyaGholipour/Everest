@@ -1,0 +1,24 @@
+﻿@using DomainLayer.DTOs.Journal
+@model GetJournalListViewModel
+@{
+    ViewData["Title"] = "JournalDetail";
+}
+
+<h1>JournalDetail</h1>
+
+<div class="row">
+    <input type="hidden" asp-for="Id"/>
+    <!-- تصویر برنامه -->
+    <div class="col-lg-6">
+        <div class="course-image">
+            <img src="/JournalImage/@Model.JournalImage" alt="تصویر مجله" class="img-fluid rounded">
+        </div>
+    </div>
+    <!-- جزئیات برنامه -->
+    <div class="col-lg-6">
+        <div class="course-details">
+            <h2 class="text-primary">عنوان برنامه: @Model.JournalTitle</h2>
+            <p class="lead">توضیحات: @Model.Content</p>
+        </div>
+    </div>
+</div>

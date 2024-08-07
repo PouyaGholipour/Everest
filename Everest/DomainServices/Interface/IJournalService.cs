@@ -19,5 +19,7 @@ namespace DomainServices.Interface
         Task<EditJournalViewModel> GetJournalForShowEditMode(int journalId);
         Task<ServiceException> EditJournal(EditJournalViewModel editJournal);
         ServiceException RemoveJournal(int journalId);
+        Task<List<GetJournalListViewModel>> GetJournaList(int take);
+        Task<GetJournalListViewModel> GetJournalDetail(int journalId);
     }
 }

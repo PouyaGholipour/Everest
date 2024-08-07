@@ -13,6 +13,8 @@ namespace EverestAppUI.Controllers
         private readonly ICourseService _courseService;
         private readonly IUserService _userService;
         private readonly IProgService _progService;
+        private readonly IJournalService _journalService;
+        private readonly IReportService _reportlService;
         private readonly ICourseUserService _courseUserService;
         private readonly IProgUserService _progUserService;
 
@@ -21,7 +23,9 @@ namespace EverestAppUI.Controllers
                               ICourseService courseService,
                               IUserService userService,
                               ICourseUserService courseUserService,
-                              IProgUserService progUserService)
+                              IProgUserService progUserService,
+                              IJournalService journalService,
+                              IReportService reportService)
         {
             _logger = logger;
             _userService = userService;
@@ -29,6 +33,8 @@ namespace EverestAppUI.Controllers
             _progService = progService;
             _courseUserService = courseUserService;
             _progUserService = progUserService;
+            _journalService = journalService;
+            _reportlService = reportService;
         }
 
         public IActionResult Index()
@@ -255,6 +261,138 @@ namespace EverestAppUI.Controllers
                 return Redirect("/");
             }
         }
+
+        #endregion
+
+        #region Journal
+
+        [HttpGet]
+        public async Task<IActionResult> ShowJournalList()
+        {
+            try
+            {
+                var journalList = await _journalService.GetJournaList(20);
+                return View(journalList);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> JournalDetail(int journalId)
+        {
+            if (journalId == 0)
+            {
+                var error = ServiceException.Create(
+                    type: "NotFound",
+                    title: "شناسه موجود نمیباشد.",
+                    detail: "شناسه مورد نظر برای بارگذاری اطلاعات مجله یافت نشد.");
+                ViewBag.error = error.Detail;
+
+                return Redirect("/");
+            }
+            try
+            {
+                var journalDetail = await _journalService.GetJournalDetail(journalId);
+                return View(journalDetail);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+
+        #endregion
+
+        #region Report
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportList()
+        {
+            try
+            {
+                var reportList = await _reportlService.GetReportList(20);
+                return View(reportList);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReportDetail(int reportId)
+        {
+            if (reportId == 0)
+            {
+                var error = ServiceException.Create(
+                    type: "NotFound",
+                    title: "شناسه موجود نمیباشد.",
+                    detail: "شناسه مورد نظر برای بارگذاری اطلاعات گزارش یافت نشد.");
+                ViewBag.error = error.Detail;
+
+                return Redirect("/");
+            }
+            try
+            {
+                var reportDetail = await _reportlService.GetReportlDetail(reportId);
+                return View(reportDetail);
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        } 
 
         #endregion
     }

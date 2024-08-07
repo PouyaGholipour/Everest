@@ -149,5 +149,37 @@ namespace DomainServices.Services
                     title: "عملیات موفق.",
                     detail: "عملیات حذف گزارش با موفقیت انجام شد.");
         }
+
+        public async Task<List<GetReportListViewModel>> GetReportList(int take)
+        {
+            IQueryable<Report> reports = await GetAllAsyncQuery();
+
+            var reportList = reports.OrderByDescending(c => c.DateOfHolding)
+               .Take(take).Select(c => new GetReportListViewModel
+               {
+                   Id = c.Id,
+                   Title = c.ReportTitle,
+                   DateOfHolding = c.DateOfHolding.ToString("yyyy-MM-dd"),
+                   Image = c.ImageName,
+                   Place = c.Place
+
+               }).ToList();
+
+            return reportList;
+        }
+
+        public async Task<GetReportListViewModel> GetReportlDetail(int reportId)
+        {
+            var reportDetail = await GetByIdAsync(reportId);
+            GetReportListViewModel getReport = new GetReportListViewModel()
+            {
+                Id = reportId,
+                Title = reportDetail.ReportTitle,
+                ReportContent = reportDetail.ReportContent,
+                Place = reportDetail.Place,
+                DateOfHolding = reportDetail.DateOfHolding.ToString("yyyy-MM-dd"),
+            };
+            return getReport;
+        }
     }
 }
