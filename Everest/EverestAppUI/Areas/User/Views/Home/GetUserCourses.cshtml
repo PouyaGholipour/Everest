@@ -23,7 +23,8 @@
                     <td>@course.CourseTitle</td>
                     <td>@course.Description</td>
                     <td>@course.HoldingDate</td>
-                    <td><a class="btn btn-primary" asp-action="RemoveCourseUser" asp-route-CourseId ="@course.CourseId">حذف</a> | ثبت نهایی</td>
+                    <td><a class="btn btn-primary" asp-action="RemoveCourseUser" asp-route-CourseId ="@course.CourseId">حذف</a> |
+                        <a class="btn btn-primary">ثبت نهایی</a></td>
                 </tr>
             }
         </tbody>

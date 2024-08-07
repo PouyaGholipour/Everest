@@ -27,7 +27,7 @@
             <p><strong>قیمت:</strong> <span class="text-success">@Model.Price.ToString() تومان</span></p>
             <p><strong>تاریخ برگزاری:</strong> <span>@Model.HoldingDate</span></p>
             <p><strong>نوع دوره:</strong> <span>@Model.ProgramType</span></p>
-            <a class="btn btn-primary">افزودن به برنامه های من</a>
+            <a asp-action="AddProgToUser" asp-route-ProgId="@Model.Id" class="btn btn-primary">افزودن به برنامه های من</a>
         </div>
     </div>
 </div>

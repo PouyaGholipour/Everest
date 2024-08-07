@@ -1,9 +1,9 @@
-﻿
-@{
-    ViewData["Title"] = "جذف دوره";
+﻿@{
+    ViewData["Title"] = "افزودن برنامه";
 }
 
-<h1>حذف دوره از لیست دوره ها</h1>
+<h1>افزودن برنامه به لیست برنامه ها</h1>
+
 
 @if (!string.IsNullOrEmpty(ViewBag.Message))
 {
@@ -22,5 +22,5 @@
 <script>
     // Your delay in milliseconds
     var delay = 3000;
-    setTimeout(function () { window.location = "https://localhost:7154/User/Home/GetUserCourses/"; }, delay);
+    setTimeout(function () { window.location = "https://localhost:7154/"; }, delay);
 </script>

@@ -11,6 +11,6 @@ namespace DomainLayer.DTOs.Course
         public int? Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public DateTime? DateOfHolding { get; set; }
+        public string? DateOfHolding { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿<!-- start navbar -->
 <nav class="navbar">
     <img class="img-fluid" src="./img/Logo.jpg" alt="آیکون" style="width: 80px; height: 50px;">
+    <div>حساب کاربری: <strong>@((@ViewBag.FullName != null)? $"{@ViewBag.FullName}" : $"{@ViewBag.Username}")</strong></div>
     <ul class="nav-links">
         <li><a asp-controller="Home" asp-action="Index" class="active">صفحه اصلی</a></li>
         <li class="dropdown">

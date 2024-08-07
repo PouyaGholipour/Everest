@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace DomainServices.Services
 {
-    public class CourseUserService : Repository<CourseUser>, ICourseUserService
+    public class ProgUserService : Repository<ProgUser>, IProgUserService
     {
         private readonly EverestDataBaseContext _context;
         private readonly IUserRepositoy _userRepositoy;
         public IUnitOfWork _unitOfWork { get; }
-        public CourseUserService(EverestDataBaseContext context,
+        public ProgUserService(EverestDataBaseContext context,
                            IUnitOfWork unitOfWork,
                            IUserRepositoy userRepositoy) : base(context, unitOfWork)
         {
@@ -26,38 +26,37 @@ namespace DomainServices.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceException> AddCourseToUser(int userId, int courseId)
+        public async Task<ServiceException> AddProgToUser(int userId, int progId)
         {
-
-            if (userId == 0 || courseId == 0)
+            if (userId == 0 || progId == 0)
                 return ServiceException.Create(type: "NotFound",
                     title: "اطلاعات یافت نشد",
                     detail: ".اطلاعاتی با این شناسه ها برای انجام عملیات یافت نشد");
 
-            var courseUser = new CourseUser()
+            var progUser = new ProgUser()
             {
-                CourseId = courseId,
                 UserId = userId,
+                ProgId = progId
             };
 
-            await CreateAsync(courseUser);
+            await CreateAsync(progUser);
             return ServiceException.Create(type: "Success",
                     title: "عملیات موفق",
-                    detail: "این دوره به لیست دوره های شما افزوده شد.");
+                    detail: "این برنامه به لیست برنامه های شما افزوده شد.");
         }
 
-        public async Task<ServiceException> RemoveCourseUser(int userId, int courseId)
+        public async Task<ServiceException> RemoveProgUser(int userId, int progId)
         {
-            if (userId == 0 || courseId == 0)
+            if (userId == 0 || progId == 0)
                 return ServiceException.Create(type: "NotFound",
                     title: "اطلاعات یافت نشد",
                     detail: ".اطلاعاتی با این شناسه ها برای انجام عملیات یافت نشد");
 
-            var userCourse = await GetListAsync(x => x.UserId == userId && x.CourseId == courseId);
-            RemoveRange(userCourse);
+            var userProg = await GetListAsync(x => x.UserId == userId && x.ProgId == progId);
+            RemoveRange(userProg);
             return ServiceException.Create(type: "Success",
                     title: "عملیات موفق",
-                    detail: "این دوره از لیست دوره های شما حذف شد.");
+                    detail: "این برنامه از لیست برنامه های شما حذف شد.");
         }
     }
 }

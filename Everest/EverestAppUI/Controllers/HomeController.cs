@@ -14,22 +14,28 @@ namespace EverestAppUI.Controllers
         private readonly IUserService _userService;
         private readonly IProgService _progService;
         private readonly ICourseUserService _courseUserService;
+        private readonly IProgUserService _progUserService;
 
         public HomeController(ILogger<HomeController> logger,
                               IProgService progService,
                               ICourseService courseService,
                               IUserService userService,
-                              ICourseUserService courseUserService)
+                              ICourseUserService courseUserService,
+                              IProgUserService progUserService)
         {
             _logger = logger;
             _userService = userService;
             _courseService = courseService;
             _progService = progService;
             _courseUserService = courseUserService;
+            _progUserService = progUserService;
         }
 
         public IActionResult Index()
         {
+            var user = _userService.GetAsync(x => x.UserName == User.Identity.Name).Result;
+            ViewBag.FullName = user.FullName;
+            ViewBag.Username = User.Identity.Name;
             return View();
         }
 
@@ -217,7 +223,38 @@ namespace EverestAppUI.Controllers
 
         #region ProgUser
 
+        [HttpGet]
+        public async Task<IActionResult> AddProgToUser(int progId)
+        {
+            try
+            {
+                var user = await _userService.GetAsync(x => x.UserName == User.Identity.Name);
+                var result = await _progUserService.AddProgToUser(user.Id, progId);
 
+                if (result.Type == "NotFound")
+                    ViewBag.error = $"{result.Detail}";
+                else if (result.Type == "Success")
+                    ViewBag.Message = $"{result.Detail}";
+
+                return View();
+            }
+            catch (ServiceException exception)
+            {
+                exception = ServiceException.Create(
+                    type: "OperationFailed",
+                    title: "خطا در انجام عملیات",
+                    detail: "هنگام انجام عملیات خطایی روی داد. لطفا دوباره تلاش کنید.");
+
+                ViewBag.error = $"{exception.Title} {System.Environment.NewLine} {exception.Detail}";
+
+                if (exception.InnerException != null)
+                {
+                    ViewBag.error += "" + exception.InnerException.Message;
+                }
+
+                return Redirect("/");
+            }
+        }
 
         #endregion
     }

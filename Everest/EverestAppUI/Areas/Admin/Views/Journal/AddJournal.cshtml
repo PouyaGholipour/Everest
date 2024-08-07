@@ -1,0 +1,75 @@
+﻿@using DomainLayer.DTOs.Journal
+@model AddJournalViewModel
+@{
+    ViewData["Title"] = "افزودن مجله";
+}
+
+<h1>افزودن مجله</h1>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if(!string.IsNullOrEmpty(ViewBag.error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.error
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header BTN-PANEL text-white">اطلاعات مجله جدید</div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <!-- Id Field (Hidden) -->
+                    <input asp-for="Id" type="hidden" name="Id" value="1">
+
+                    <!-- عنوان دوره -->
+                    <div class="form-group">
+                        <label asp-for="JournalTitle" for="JournalTitle">عنوان مجله</label>
+                        <input asp-for="JournalTitle" type="text" class="form-control" id="JournalTitle" name="JournalTitle" value="عنوان مجله" required="">
+                        <span asp-validation-for="JournalTitle" class="text-danger"></span>
+                    </div>
+
+                    <!-- توضیحات -->
+                    <div class="form-group">
+                        <label asp-for="Content" for="Description">محتوا</label>
+                        <textarea asp-for="Content" class="form-control" id="Content" name="Content" rows="4" required="">محتوا </textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+
+                    <!-- انتخاب تصویر -->
+                    <div class="form-group">
+                        <img id="JournalImagePreview" src="/JournalImage/Default.jpg" alt="Journal Image" style="width:60%; border-radius:10px" class="mt-2 mb-2">
+                        <input asp-for="ImageName" type="file" class="form-control-file" id="ImageName" name="ImageName">
+                    </div>
+
+                    <!-- دکمه ذخیره -->
+                    <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#JournalImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImageName").change(function() {
+            readURL(this);
+        });
+    </script>
+}

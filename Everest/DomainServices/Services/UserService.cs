@@ -418,9 +418,10 @@ namespace DomainServices.Services
                 .SelectMany(x => x.ProgUsers).Include(x => x.Prog)
                 .Select(x => new GetProgForUserViewModel
                 {
+                    Id = x.Prog.Id,
                     Title = x.Prog.Title,
                     Description = x.Prog.Description,
-                    DateOfHolding = x.Prog.DateOfHolding
+                    DateOfHolding = x.Prog.DateOfHolding.ToString("yyyy-MM-dd")
                 }).ToListAsync();
         }
     }

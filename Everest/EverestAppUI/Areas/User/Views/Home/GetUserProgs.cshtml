@@ -13,6 +13,7 @@
                 <th>عنوان برنامه</th>
                 <th>توضیحات</th>
                 <th>تاریخ برگزاری</th>
+                <th>عملیات</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,8 @@
                     <td>@prog.Title</td>
                     <td>@prog.Description</td>
                     <td>@prog.DateOfHolding</td>
+                    <td><a class="btn btn-primary" asp-action="RemoveProgUser" asp-route-ProgId ="@prog.Id">حذف</a> |
+                        <a class="btn btn-primary">ثبت نهایی</a></td>
                 </tr>
             }
         </tbody>
