@@ -4,6 +4,7 @@ using InfrastructureLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(EverestDataBaseContext))]
-    partial class EverestDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240808070645_Mig_AddIsDeleteToRole")]
+    partial class Mig_AddIsDeleteToRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,29 +210,6 @@ namespace InfrastructureLayer.Migrations
                     b.ToTable("Journals");
                 });
 
-            modelBuilder.Entity("DomainLayer.Entities.Permission", b =>
-                {
-                    b.Property<int>("PermissionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"), 1L, 1);
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.HasKey("PermissionId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Permissions");
-                });
-
             modelBuilder.Entity("DomainLayer.Entities.Prog", b =>
                 {
                     b.Property<int>("Id")
@@ -369,24 +348,6 @@ namespace InfrastructureLayer.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Role");
-                });
-
-            modelBuilder.Entity("DomainLayer.Entities.RolePermission", b =>
-                {
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RP_Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.RoleUser", b =>
@@ -539,14 +500,6 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DomainLayer.Entities.Permission", b =>
-                {
-                    b.HasOne("DomainLayer.Entities.Permission", null)
-                        .WithMany("Permissions")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("DomainLayer.Entities.Prog", b =>
                 {
                     b.HasOne("DomainLayer.Entities.Category", "Category")
@@ -575,25 +528,6 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("Prog");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DomainLayer.Entities.RolePermission", b =>
-                {
-                    b.HasOne("DomainLayer.Entities.Permission", "Permission")
-                        .WithMany("RolePermissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DomainLayer.Entities.Role", "Role")
-                        .WithMany("RolePermissions")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Permission");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.RoleUser", b =>
@@ -629,13 +563,6 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("CourseUsers");
                 });
 
-            modelBuilder.Entity("DomainLayer.Entities.Permission", b =>
-                {
-                    b.Navigation("Permissions");
-
-                    b.Navigation("RolePermissions");
-                });
-
             modelBuilder.Entity("DomainLayer.Entities.Prog", b =>
                 {
                     b.Navigation("ProgUsers");
@@ -648,8 +575,6 @@ namespace InfrastructureLayer.Migrations
 
             modelBuilder.Entity("DomainLayer.Entities.Role", b =>
                 {
-                    b.Navigation("RolePermissions");
-
                     b.Navigation("RoleUsers");
                 });
 

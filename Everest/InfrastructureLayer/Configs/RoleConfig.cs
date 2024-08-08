@@ -14,6 +14,8 @@ namespace InfrastructureLayer.Configs
         public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.HasKey(r => r.RoleId);
+
+            builder.HasQueryFilter(x => !x.IsDelete);
         }
     }
 }

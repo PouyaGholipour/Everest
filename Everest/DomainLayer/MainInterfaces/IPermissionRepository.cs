@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.DTOs.Role;
+using DomainLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,11 @@ namespace DomainLayer.MainInterfaces
 
         void AddRoleToUser(List<int> RoleId, int userId);
         void EditUserRole(int userId, List<int> RoleIds);
+        int CreateRole(CreateRoleViewModel createRole);
+        List<CreateRoleViewModel> GetRoles();
+        List<Role> GetRoleList();
+        CreateRoleViewModel ShowRoleForEditMode(int id);
+        void EditRole(CreateRoleViewModel createRole);
+        void DeleteRole(int id);
     }
 }

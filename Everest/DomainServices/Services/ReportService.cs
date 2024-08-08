@@ -177,7 +177,8 @@ namespace DomainServices.Services
                 Title = reportDetail.ReportTitle,
                 ReportContent = reportDetail.ReportContent,
                 Place = reportDetail.Place,
-                DateOfHolding = reportDetail.DateOfHolding.ToString("yyyy-MM-dd"),
+                Image = reportDetail.ImageName,
+                DateOfHolding = reportDetail.DateOfHolding.ToString("dd-MM-yyyy"),
             };
             return getReport;
         }

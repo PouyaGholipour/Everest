@@ -31,6 +31,8 @@ namespace InfrastructureLayer.ApplicationDbContext
             modelBuilder.ApplyConfiguration(new RoleUserConfig());
             modelBuilder.ApplyConfiguration(new CourseUserConfig());
             modelBuilder.ApplyConfiguration(new ProgUserConfig());
+            modelBuilder.ApplyConfiguration(new PermissionConfig());
+            modelBuilder.ApplyConfiguration(new RolePermissionConfig());
         }
 
         public DbSet<User> Users { get; set; }
@@ -43,5 +45,7 @@ namespace InfrastructureLayer.ApplicationDbContext
         public DbSet<RoleUser> RoleUsers { get; set; }
         public DbSet<CourseUser> CourseUsers { get; set; }
         public DbSet<ProgUser> ProgUsers { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
     }
 }

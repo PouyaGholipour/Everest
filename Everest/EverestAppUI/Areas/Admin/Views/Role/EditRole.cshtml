@@ -1,0 +1,50 @@
+﻿@using DomainLayer.DTOs.Role
+@model CreateRoleViewModel
+@{
+    ViewData["Title"] = "ویرایش نقش";
+}
+
+<h1>ویرایش نقش</h1>
+
+<div class="container">
+    <form asp-controller="Role" asp-action="EditRole" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header BTN-PANEL text-white">نقش جدید</div>
+                        <div class="card-body">
+                            <!-- Id Field (Hidden) -->
+                            <input asp-for="Id" type="hidden">
+
+                            <!-- عنوان دوره -->
+                            <div class="form-group">
+                                <label asp-for="Title" for="Title">عنوان نقش</label>
+                                <input asp-for="Title" type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required="">
+                            </div>
+
+                            <!-- دکمه ذخیره -->
+                            <button type="submit" class="btn btn-primary mt-3 BTN-PANEL">ذخیره تغییرات</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header BTN-PANEL text-white">نقش جدید</div>
+                        <div class="card-body">
+                            <!-- عنوان دوره -->
+                            <div class="form-group">
+                                <label for="CourseTitle">عنوان نقش</label>
+@*                                <input type="checkbox" class="form-control" id="CourseTitle" name="SelectedRole" value="دسترسی نقش" required="">
+*@                            </div>
+
+                            <!-- دکمه ذخیره -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form >
+</div>

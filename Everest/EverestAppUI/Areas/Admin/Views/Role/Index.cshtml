@@ -1,0 +1,33 @@
+﻿@using DomainLayer.DTOs.Role
+@model List<CreateRoleViewModel>
+@{
+    ViewData["Title"] = "لیست نقش ها";
+}
+
+<h1>لیست نقش ها</h1>
+
+<div class="col-sm-2 col-md-2">
+    <a asp-area="Admin" asp-controller="Role" asp-action="AddRole" class="btn btn-primary" style="margin:7px 0 7px 0; color:white">افزودن نقش جدید</a>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>عنوان نقش</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+        
+    <tbody>
+        @foreach(var role in Model)
+        {
+            <tr>
+                
+                <td>@role.Title</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Role" asp-action="EditRole" asp-route-RoleId="@role.Id" class="btn btn-primary">ویرایش</a> | 
+                    <a asp-area="Admin" asp-controller="Role" asp-action="DeleteRole" asp-route-RoleId="@role.Id" class="btn btn-primary">حذف</a><input type="hidden" asp-for="@role.Id"/>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

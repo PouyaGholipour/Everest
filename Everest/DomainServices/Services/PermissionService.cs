@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.DTOs.Role;
+using DomainLayer.Entities;
 using DomainLayer.MainInterfaces;
 using DomainServices.Interface;
 using InfrastructureLayer.ApplicationDbContext;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DomainServices.Services
 {
-    public class PermissionService : Repository<Role>, IPermissionService
+    public class PermissionService : Repository<Permission>, IPermissionService
     {
         private readonly EverestDataBaseContext _context;
         public IUnitOfWork _unitOfWork { get; }
@@ -21,10 +22,10 @@ namespace DomainServices.Services
             this._context = (this._context ?? (EverestDataBaseContext)context);
         }
 
-        public List<Role> GetRoles()
+        public List<Permission> GetPermissions()
         {
-            var permmissions = GetAll();
-            return permmissions;
+            var permissions = GetAll();
+            return permissions;
         }
     }
 }

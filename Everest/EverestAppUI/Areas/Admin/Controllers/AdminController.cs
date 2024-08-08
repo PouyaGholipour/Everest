@@ -136,7 +136,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
 
             var userViewModel = await _userService.GetUserForShowEditMode(id);
-            ViewData["Roles"] = _permissionService.GetRoles();
+            ViewData["Roles"] = _permissionRepository.GetRoleList();
 
             return View(userViewModel);
         }
