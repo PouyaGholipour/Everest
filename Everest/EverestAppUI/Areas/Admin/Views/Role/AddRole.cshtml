@@ -1,7 +1,9 @@
 ﻿@using DomainLayer.DTOs.Role
+@using DomainLayer.Entities
 @model CreateRoleViewModel
 @{
     ViewData["Title"] = "افزودن نقش جدید";
+    List<Permission> permissions = ViewData["permissions"] as List<Permission>;
 }
 
 <h1>افزودن نقش جدید</h1>
@@ -32,19 +34,39 @@
             <div class="col-md-5">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header BTN-PANEL text-white">نقش جدید</div>
-                        <div class="card-body">
-                            <!-- Id Field (Hidden) -->
-                            <input type="hidden" name="Id" value="1">
-
-                            <!-- عنوان دوره -->
-                            <div class="form-group">
-                                <label for="CourseTitle">عنوان نقش</label>
-@*                                <input type="checkbox" class="form-control" id="CourseTitle" name="SelectedRole" value="دسترسی نقش" required="">
-*@                            </div>
-
-                            <!-- دکمه ذخیره -->
-                        </div>
+                        <div class="card-header BTN-PANEL text-white">دسترسی های نقش</div>
+                        <div class="panel-body">
+                    <ul>
+                        @foreach (var permission in permissions.Where(p => p.ParentId == null))
+                        {
+                            <li>
+                                <input type="checkbox" name="SelectedPermission" value="@permission.PermissionId" /> @permission.Title
+                                @if (permissions.Any(p => p.ParentId == permission.ParentId))
+                                {
+                                    <ul>
+                                        @foreach (var sub in permissions.Where(s => s.ParentId == permission.PermissionId))
+                                        {
+                                            <li>
+                                                <input type="checkbox" name="SelectedPermission" value="@sub.PermissionId" /> @sub.Title
+                                                @if (permissions.Any(p => p.ParentId == sub.ParentId))
+                                                {
+                                                    <ul>
+                                                        @foreach (var sub2 in permissions.Where(s => s.ParentId == sub.PermissionId))
+                                                        {
+                                                            <li>
+                                                                <input type="checkbox" name="SelectedPermission" value="@sub2.PermissionId" /> @sub2.Title
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
                     </div>
                 </div>
             </div>

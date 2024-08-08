@@ -11,6 +11,6 @@ namespace DomainLayer.DTOs.Role
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        //public List<Permission> Permissions { get; set; }
+        public List<Permission> Permissions { get; set; }
     }
 }

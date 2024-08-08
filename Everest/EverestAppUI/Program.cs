@@ -50,6 +50,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IJournalService, JournalService>();
 builder.Services.AddScoped<ICourseUserService, CourseUserService>();
 builder.Services.AddScoped<IProgUserService, ProgUserService>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<IProgService, ProgService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();

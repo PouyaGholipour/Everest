@@ -1,6 +1,7 @@
 ﻿using DomainLayer.DTOs.Role;
 using DomainLayer.MainInterfaces;
 using DomainServices.Exception;
+using DomainServices.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
@@ -9,26 +10,35 @@ namespace EverestAppUI.Areas.Admin.Controllers
     public class RoleController : Controller
     {
         private readonly IPermissionRepository _permissionRepository;
-        public RoleController(IPermissionRepository permissionRepository)
+        private readonly IPermissionService _permissionService;
+        private readonly IRolePermissionService _rolePermissionService;
+        public RoleController(IPermissionRepository permissionRepository,
+                              IPermissionService permissionService,
+                              IRolePermissionService rolePermissionService)
         {
             _permissionRepository = permissionRepository;
+            _permissionService = permissionService;
+            _rolePermissionService = rolePermissionService;
         }
         public IActionResult Index()
         {
-            var roleList = _permissionRepository.GetRoles();
+            var roleList = _permissionRepository.GetRoles();   
             return View(roleList);
         }
 
         [HttpGet]
         public IActionResult AddRole()
         {
+
+            ViewData["permissions"] = _permissionService.GetPermissions();
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddRole(CreateRoleViewModel createRole)
+        public IActionResult AddRole(CreateRoleViewModel createRole, List<int> selectedPermission)
         {
             int roleId = _permissionRepository.CreateRole(createRole);
+            _rolePermissionService.AddPermissionToRole(roleId, selectedPermission);
             return RedirectToAction("Index", "Role", new {area="Admin"});
         }
 
@@ -42,12 +52,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
                     title: "شناسه موجود نمیباشد.",
                     detail: "شناسه مورد نظر برای بارگذاری اطلاعات نقش یافت نشد.");
                 ViewBag.error = error.Detail;
-
                 return Redirect("/Admin/Role/Index/");
             }
             try
             {
                 var roleModel = _permissionRepository.ShowRoleForEditMode(roleId);
+                ViewData["permissions"] = _permissionService.GetPermissions();
+                ViewData["SelectedPermission"] = _rolePermissionService.PermissionsInRole(roleId);
                 return View(roleModel);
             }
             catch (ServiceException exception)
@@ -69,11 +80,12 @@ namespace EverestAppUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditRole(CreateRoleViewModel createRole)
+        public IActionResult EditRole(CreateRoleViewModel createRole, List<int> selectedPermission)
         {
             try
             {
                 _permissionRepository.EditRole(createRole);
+                _rolePermissionService.UpdateRolePermission(createRole.Id, selectedPermission);
                 return RedirectToAction("Index", "Role", new {area = "Admin"});
             }
             catch (ServiceException exception)

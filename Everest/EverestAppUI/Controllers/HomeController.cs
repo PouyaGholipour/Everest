@@ -40,7 +40,6 @@ namespace EverestAppUI.Controllers
         public IActionResult Index()
         {
             var user = _userService.GetAsync(x => x.UserName == User.Identity.Name).Result;
-            ViewBag.FullName = user.FullName;
             ViewBag.Username = User.Identity.Name;
             return View();
         }
