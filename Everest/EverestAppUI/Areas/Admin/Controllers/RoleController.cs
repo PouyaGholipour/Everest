@@ -1,5 +1,6 @@
 ﻿using DomainLayer.DTOs.Role;
 using DomainLayer.MainInterfaces;
+using DomainLayer.Security;
 using DomainServices.Exception;
 using DomainServices.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ namespace EverestAppUI.Areas.Admin.Controllers
             _permissionService = permissionService;
             _rolePermissionService = rolePermissionService;
         }
+
+        [PermissionChecker(22)]
         public IActionResult Index()
         {
             var roleList = _permissionRepository.GetRoles();   
