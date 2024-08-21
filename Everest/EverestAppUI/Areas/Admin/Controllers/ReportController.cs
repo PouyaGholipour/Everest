@@ -1,11 +1,13 @@
 ﻿using DomainLayer.DTOs.Report;
 using DomainServices.Exception;
 using DomainServices.Interface;
+using DomainServices.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionChecker(14)]
     public class ReportController : Controller
     {
         private readonly IReportService _reportService;
@@ -13,11 +15,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             _reportService = reportService;
         }
+        [PermissionChecker(14)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [PermissionChecker(14)]
         public IActionResult GetPagedList(int pageId = 1, string reportTitleFilter = "")
         {
             try
@@ -42,12 +46,14 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(15)]
         [HttpGet]
         public IActionResult AddReport()
         {
             return View();
         }
 
+        [PermissionChecker(15)]
         [HttpPost]
         public async Task<IActionResult> AddReport(AddReportViewModel addReportViewModel)
         {
@@ -75,6 +81,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(16)]
         [HttpGet]
         [Route("/Admin/Report/EditReport/{id?}")]
         public async Task<IActionResult> EditReport(int reportId)
@@ -93,6 +100,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View(viewModel);
         }
 
+        [PermissionChecker(16)]
         [HttpPost]
         [Route("/Admin/Report/EditReport/{id?}")]
         public async Task<IActionResult> EditReport(EditReportViewModel editReportViewModel)
@@ -118,7 +126,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 return Redirect("/Admin/Report/GetPagedList/");
             }
         }
-
+        [PermissionChecker(17)]
         [Route("/Admin/Report/RemoveReport/{id?}")]
         public IActionResult RemoveReport(int reportId)
         {

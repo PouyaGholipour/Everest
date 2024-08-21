@@ -401,6 +401,7 @@ namespace DomainServices.Services
 
         public async Task<List<GetCourseForUserViewModel>> GetUserCourses(string userName)
         {
+            // Give Data from database context
             return await _context.Users.Where(x => x.UserName == userName)
                 .SelectMany(x => x.CourseUsers).Include(x => x.Course)
                 .Select(x => new GetCourseForUserViewModel
@@ -414,6 +415,7 @@ namespace DomainServices.Services
 
         public async Task<List<GetProgForUserViewModel>> GetUserProgs(string userName)
         {
+            // Give Data from database context
             return await _context.Users.Where(x => x.UserName == userName)
                 .SelectMany(x => x.ProgUsers).Include(x => x.Prog)
                 .Select(x => new GetProgForUserViewModel

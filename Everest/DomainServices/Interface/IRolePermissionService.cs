@@ -13,5 +13,6 @@ namespace DomainServices.Interface
         void AddPermissionToRole(int roleId, List<int> permissions);
         List<int> PermissionsInRole(int roleId);
         void UpdateRolePermission(int roleId, List<int> permissions);
+        bool CheckPermission(int permissionId, string userName);
     }
 }

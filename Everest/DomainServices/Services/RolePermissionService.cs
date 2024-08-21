@@ -18,7 +18,7 @@ namespace DomainServices.Services
         public RolePermissionService(EverestDataBaseContext everestDataBase
                              , IUnitOfWork unitOfWork) : base(everestDataBase, unitOfWork)
         {
-            _context = everestDataBase;
+            this._context = (this._context ?? (EverestDataBaseContext)everestDataBase);
             _unitOfWork = unitOfWork;
         }
 
@@ -46,6 +46,23 @@ namespace DomainServices.Services
             RemoveRange(permissionRole);
 
             AddPermissionToRole(roleId, permissions);
+        }
+
+        public bool CheckPermission(int permissionId, string userName)
+        {
+            // Give Data from database context
+            int userId = _context.Users.FirstOrDefault(x => x.UserName == userName).Id;
+
+            List<int> userRolesIds = _context.RoleUsers.Where(x => x.UserId == userId)
+                .Select(x => x.RoleId).ToList();
+
+            if (!userRolesIds.Any()) return false;
+
+            List<int> RolePermissionIds = _context.RolePermissions
+                .Where(x => x.PermissionId == permissionId)
+                .Select(x => x.RoleId).ToList();
+
+            return RolePermissionIds.Any(x => userRolesIds.Contains(x));
         }
     }
 }

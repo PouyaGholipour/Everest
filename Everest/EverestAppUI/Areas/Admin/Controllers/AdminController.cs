@@ -2,11 +2,13 @@
 using DomainLayer.MainInterfaces;
 using DomainServices.Exception;
 using DomainServices.Interface;
+using DomainServices.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionChecker(1)]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
@@ -23,11 +25,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
             _permissionRepository = permissionRepository;
             _unitOfWork = unitOfWork;
         }
+        [PermissionChecker(1)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [PermissionChecker(2)]
         public async Task<IActionResult> GetPagedList(int pageId = 1, string userNameFilter = "", string emailFilter = "")
         {
             try
@@ -53,6 +57,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(3)]
         [Route("/Admin/CreateUser")]
         public IActionResult CreateUser()
         {
@@ -60,6 +65,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View();
         }
 
+        [PermissionChecker(3)]
         [HttpPost]
         [Route("/Admin/CreateUser")]
         public async Task<IActionResult> CreateUser(CreateUserViewModel createUser, List<int> SelectedRoles)
@@ -92,6 +98,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             
         }
 
+        [PermissionChecker(5)]
         public IActionResult Delete(int id)
         {
             try
@@ -121,6 +128,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
             
         }
+        [PermissionChecker(4)]
         [Route("/Admin/EditUser/{id?}")]
         public async Task<IActionResult> EditUser(int id)
         {
@@ -141,6 +149,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View(userViewModel);
         }
 
+        [PermissionChecker(4)]
         [HttpPost]
         [Route("/Admin/EditUser/{id?}")]
         public async Task<IActionResult> EditUser(EditUserViewModel editUserViewModel, List<int> SelectedRoles)

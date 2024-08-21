@@ -1,13 +1,14 @@
 ﻿using DomainLayer.DTOs.Role;
 using DomainLayer.MainInterfaces;
-using DomainLayer.Security;
 using DomainServices.Exception;
 using DomainServices.Interface;
+using DomainServices.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionChecker(22)]
     public class RoleController : Controller
     {
         private readonly IPermissionRepository _permissionRepository;
@@ -29,6 +30,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View(roleList);
         }
 
+        [PermissionChecker(23)]
         [HttpGet]
         public IActionResult AddRole()
         {
@@ -37,6 +39,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View();
         }
 
+        [PermissionChecker(23)]
         [HttpPost]
         public IActionResult AddRole(CreateRoleViewModel createRole, List<int> selectedPermission)
         {
@@ -45,6 +48,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return RedirectToAction("Index", "Role", new {area="Admin"});
         }
 
+        [PermissionChecker(25)]
         [HttpGet]
         public IActionResult EditRole(int roleId)
         {
@@ -82,6 +86,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(25)]
         [HttpPost]
         public IActionResult EditRole(CreateRoleViewModel createRole, List<int> selectedPermission)
         {
@@ -109,6 +114,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(26)]
         public IActionResult DeleteRole(int roleId)
         {
             _permissionRepository.DeleteRole(roleId);

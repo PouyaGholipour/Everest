@@ -1,11 +1,13 @@
 ﻿using DomainLayer.DTOs.Journal;
 using DomainServices.Exception;
 using DomainServices.Interface;
+using DomainServices.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionChecker(18)]
     public class JournalController : Controller
     {
         private readonly IJournalService _journalService;
@@ -13,11 +15,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             _journalService = journalService;
         }
+        [PermissionChecker(18)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [PermissionChecker(18)]
         [HttpGet]
         public IActionResult GetPagedList(int pageId = 1, string journalTitleFilter = "")
         {
@@ -44,12 +48,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(19)]
         [HttpGet]
         public IActionResult AddJournal()
         {
             return View();
         }
-
+        [PermissionChecker(19)]
         [HttpPost]
         [Route("/Admin/Journal/AddJournal/")]
         public async Task<IActionResult> AddJournal(AddJournalViewModel addJournalViewModel)
@@ -78,6 +83,8 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 return Redirect("/Admin/Admin/Index/");
             }
         }
+
+        [PermissionChecker(20)]
         [HttpGet]
         [Route("/Admin/Journal/EditJournal/{id?}")]
         public async Task<IActionResult> EditJournal(int journalId)
@@ -86,6 +93,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View(JournalViewModel);
         }
 
+        [PermissionChecker(20)]
         [HttpPost]
         [Route("/Admin/Journal/EditJournal/{id?}")]
         public async Task<IActionResult> EditJournal(EditJournalViewModel editJournalViewModel)
@@ -108,6 +116,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(21)]
         [Route("/Admin/Journal/DeleteJournal/")]
         public IActionResult DeleteJournal(int journalId)
         {

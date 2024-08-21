@@ -1,11 +1,13 @@
 ﻿using DomainLayer.DTOs.Course;
 using DomainServices.Exception;
 using DomainServices.Interface;
+using DomainServices.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionChecker(6)]
     public class CourseController : Controller
     {
         private readonly ICourseService _courseService;
@@ -13,11 +15,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             _courseService = courseService;
         }
+        [PermissionChecker(6)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [PermissionChecker(6)]
         public async Task<IActionResult> GetPagedList(int pageId = 1, string CourseTitleFilter = "")
         {
             try
@@ -43,11 +47,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(7)]
         public IActionResult AddCourse()
         {
             return View();
         }
 
+        [PermissionChecker(7)]
         [HttpPost]
         public async Task<IActionResult> AddCourse(AddCourseViewModel courseViewModel)
         {
@@ -76,6 +82,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(8)]
         [HttpGet]
         [Route("/Admin/Course/EditCourse/{id?}")]
         public async Task<IActionResult> EditCourse(int courseId)
@@ -93,6 +100,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View(editCourseViewModel);
         }
 
+        [PermissionChecker(8)]
         [HttpPost]
         [Route("/Admin/Course/EditCourse/{id?}")]
         public async Task<IActionResult> EditCourse(EditCourseViewModel courseViewModel)
@@ -126,6 +134,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(9)]
         [Route("/Admin/Course/DeleteCourse/{id?}")]
         public IActionResult DeleteCourse(int courseId)
         {

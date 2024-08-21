@@ -1,11 +1,13 @@
 ﻿using DomainLayer.DTOs.Prog;
 using DomainServices.Exception;
 using DomainServices.Interface;
+using DomainServices.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverestAppUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionChecker(10)]
     public class ProgController : Controller
     {
         private readonly IProgService _progService;
@@ -13,11 +15,13 @@ namespace EverestAppUI.Areas.Admin.Controllers
         {
             _progService = progService;
         }
+        [PermissionChecker(10)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [PermissionChecker(10)]
         public IActionResult GetPagedList(int pageId = 1, string progTitleFilter = "")
         {
             try
@@ -42,12 +46,14 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(11)]
         [HttpGet]
         public IActionResult AddProg()
         {
             return View();
         }
 
+        [PermissionChecker(11)]
         [HttpPost]
         [Route("/Admin/Prog/AddProg/")]
         public async Task<IActionResult> AddProg(AddProgViewModel addProgViewModel)
@@ -75,6 +81,8 @@ namespace EverestAppUI.Areas.Admin.Controllers
                 return View(addProgViewModel);
             }
         }
+
+        [PermissionChecker(12)]
         [HttpGet]
         [Route("/Admin/Prog/EditProg/{id?}")]
         public async Task<IActionResult> EditProg(int progId)
@@ -94,6 +102,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             return View(progViewModel);
         }
 
+        [PermissionChecker(12)]
         [HttpPost]
         [Route("/Admin/Prog/EditProg/{id?}")]
         public async Task<IActionResult> EditProg(EditProgViewModel editProgViewModel)
@@ -124,6 +133,7 @@ namespace EverestAppUI.Areas.Admin.Controllers
             }
         }
 
+        [PermissionChecker(13)]
         [Route("/Admin/Prog/DeleteProg/")]
         public IActionResult DeleteProg(int progId)
         {

@@ -28,6 +28,7 @@ namespace InfrastructureLayer.MainServices
         }
         public void AddRoleToUser(List<int> RoleIds, int userId)
         {
+            // Give Data from database context
             var roleUsers = RoleIds.Select(roleId => new RoleUser
             {
                 UserId = userId,
@@ -39,6 +40,7 @@ namespace InfrastructureLayer.MainServices
         }
         public void EditUserRole(int userId, List<int> RoleIds)
         {
+            // Give Data from database context
             var userRoles = _context.RoleUsers.Where(x => x.UserId == userId).ToList();
             _context.RoleUsers.RemoveRange(userRoles);
             _unitOfWork.Commit();
